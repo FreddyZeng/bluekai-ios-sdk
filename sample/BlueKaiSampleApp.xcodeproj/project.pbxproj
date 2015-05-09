@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1994FB7A1AFADE0300EADBE7 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1994FB791AFADE0300EADBE7 /* AdSupport.framework */; };
+		1994FB7B1AFAEA5A00EADBE7 /* libBlueKai.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 24606FEF190AEF74000BABDD /* libBlueKai.a */; };
 		24606FE4190990FE000BABDD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24606FE3190990FE000BABDD /* Images.xcassets */; };
-		24606FF0190AEF74000BABDD /* libBlueKai.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 24606FEF190AEF74000BABDD /* libBlueKai.a */; };
 		24606FF7191309A4000BABDD /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 24606FF1191309A4000BABDD /* Icon-60@2x.png */; };
 		24606FF8191309A4000BABDD /* Icon-Small-40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 24606FF2191309A4000BABDD /* Icon-Small-40@2x.png */; };
 		24606FF9191309A4000BABDD /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 24606FF3191309A4000BABDD /* Icon-Small.png */; };
@@ -43,6 +44,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1994FB791AFADE0300EADBE7 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		24606FE3190990FE000BABDD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = BlueKaiSampleApp/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		24606FEF190AEF74000BABDD /* libBlueKai.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libBlueKai.a; sourceTree = "<group>"; };
 		24606FF1191309A4000BABDD /* Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60@2x.png"; sourceTree = "<group>"; };
@@ -91,7 +93,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				24606FF0190AEF74000BABDD /* libBlueKai.a in Frameworks */,
+				1994FB7B1AFAEA5A00EADBE7 /* libBlueKai.a in Frameworks */,
+				1994FB7A1AFADE0300EADBE7 /* AdSupport.framework in Frameworks */,
 				D7B9B72C177C11A7001815D5 /* SystemConfiguration.framework in Frameworks */,
 				B701E7F51759A26F008C3775 /* UIKit.framework in Frameworks */,
 				B701E7F71759A26F008C3775 /* Foundation.framework in Frameworks */,
@@ -147,6 +150,7 @@
 		B701E7F31759A26F008C3775 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1994FB791AFADE0300EADBE7 /* AdSupport.framework */,
 				D7B9B728177C1176001815D5 /* SystemConfiguration.framework */,
 				B701E7F41759A26F008C3775 /* UIKit.framework */,
 				B701E7F61759A26F008C3775 /* Foundation.framework */,
@@ -228,7 +232,7 @@
 				ORGANIZATIONNAME = BlueKai;
 				TargetAttributes = {
 					B701E7EF1759A26F008C3775 = {
-						DevelopmentTeam = C9JPZ34QW5;
+						DevelopmentTeam = VYAKS7W7VC;
 					};
 				};
 			};

@@ -294,7 +294,7 @@
 - (void)testUrlEncode
 {
     NSString *encodedOutput = [blueKaiSdk urlEncode:@" `~!@#$%^&*()_+-={}[]|\\:;\"'<,>.?/AZaz"];
-    NSString *expectedOutput = @"+%60~%21%40%23%24%25%5E%26%2A%28%29_%2B-%3D%7B%7D%5B%5D%7C%5C%3A%3B%22%27%3C%2C%3E.%3F%2FAZaz";
+    NSString *expectedOutput = @"%20%60~%21%40%23%24%25%5E%26%2A%28%29_%2B-%3D%7B%7D%5B%5D%7C%5C%3A%3B%22%27%3C%2C%3E.%3F%2FAZaz";
     XCTAssertTrue([expectedOutput isEqualToString:encodedOutput], @"Encoded strings do not match");
 }
 

@@ -155,6 +155,20 @@
             withUserAgent:(NSString *)userAgent
          withDevMode:(BOOL)devMode;
 
+/** Init BlueKai SDK with Automatically Getting IDFA from the device
+ *
+ * Create the instance for BlueKai SDK with required arguments and automatically grab the IDFA if
+ * ad tracking is enabled on the device. IDFA is set to nil internally if ad tracking is disabled.
+ *
+ * @param siteId, contact your BlueKai rep for this id; required
+ * @param appVersion, version of your iOS application; required
+ * @param userAgent, browser user agent string (default user agent from Safari or UIWebView), optional
+ * @param devMode, BOOL value to toggle on/off verbose logging; defaults to "NO"; optional
+ */
+- (id)initDirectAutoIdfaEnabledWithSiteId:(NSString *)siteID
+            withAppVersion:(NSString *)version
+               withDevMode:(BOOL)devMode;
+
 /** Sets URL params as a key/value pair
 *
 * @param key, URL param key; required

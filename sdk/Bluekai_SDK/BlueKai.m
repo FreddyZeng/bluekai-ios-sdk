@@ -3,6 +3,7 @@
 #import "BlueKai_Protected.h"
 #import "BlueKai_Reachability.h"
 #import "BlueKai_SBJSON.h"
+#import <AdSupport/AdSupport.h>
 
 @implementation BlueKai {
     BOOL _alertShowBool,
@@ -31,7 +32,7 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
         _useDirectHTTPCalls = YES;
         _siteId = nil;
         _idfa = nil;
-        _useHttps = NO;
+        _useHttps = YES;
         _devMode = NO;
         _optInPreference = YES;
         _userDefaults = [NSUserDefaults standardUserDefaults];
@@ -182,6 +183,26 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
             withIdfa:(NSString *)idfa
          withDevMode:(BOOL)devMode{
     return [self initDirectWithSiteId:siteID withAppVersion:version withIdfa:idfa withUserAgent:NULL withDevMode:devMode];
+}
+
+- (id)initDirectAutoIdfaEnabledWithSiteId:(NSString *)siteID withAppVersion:(NSString *)version withDevMode:(BOOL)devMode{
+    //TO-DO Add more properties about User-Agent here
+    NSString *userAgent = @"iPhone OS";
+    return [self initDirectWithSiteId:siteID withAppVersion:version withIdfa:[self identifierForAdvertising] withUserAgent:userAgent withDevMode:devMode];
+}
+
+// credit: http://stackoverflow.com/questions/12944504/
+
+- (NSString *)identifierForAdvertising
+{
+    if([[ASIdentifierManager sharedManager] isAdvertisingTrackingEnabled])
+    {
+        NSUUID *IDFA = [[ASIdentifierManager sharedManager] advertisingIdentifier];
+        
+        return [IDFA UUIDString];
+    }
+    
+    return nil;
 }
 
 - (void)setViewController:(UIViewController *)view {
@@ -790,7 +811,7 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
 
         // credit: http://stackoverflow.com/a/12927815/499700
         if (thisChar == ' ') {
-            [output appendString:@"+"];
+            [output appendString:@"%20"];
         } else if (thisChar == '.' || thisChar == '-' || thisChar == '_' || thisChar == '~' ||
                 (thisChar >= 'a' && thisChar <= 'z') ||
                 (thisChar >= 'A' && thisChar <= 'Z') ||
@@ -855,7 +876,6 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
     if(_useDirectHTTPCalls){
         [self blueKaiLogger:_devMode withString:@"Sending URL directly to tags" withObject:_webUrl];
         NSURL *directUrl = [NSURL URLWithString:[_webUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-        
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:directUrl];
         [request setHTTPMethod:@"GET"];
         
@@ -949,7 +969,7 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
     
 
     if (_idfa != NULL && [_idfa length] > 0) {
-        [urlString appendString:[NSString stringWithFormat:@"&%@",[self getDataParam:@"phint" WithKey:@"idfa" AndValue:_idfa]]];
+        [urlString appendString:[NSString stringWithFormat:@"&%@",[self getDataParam:NULL WithKey:@"idfa" AndValue:_idfa]]];
     }
 
     // send the dictionary details to BlueKai server
@@ -968,15 +988,15 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
         } else {
             [urlString appendString:[NSString stringWithFormat:@"&%@",
                                      [self getDataParam:@"phint"
-                                                WithKey:[self urlEncode:[_keyValDict allKeys][i]]
-                                               AndValue:[self urlEncode:_keyValDict[[_keyValDict allKeys][i]]]]]];
+                                                WithKey:[_keyValDict allKeys][i]
+                                               AndValue:_keyValDict[[_keyValDict allKeys][i]]]]];
             _urlLength = urlString.length;
         }
     }
     
     if(_useDirectHTTPCalls) {
-        [urlString appendString:[NSString stringWithFormat:@"&%@",[self getDataParam:@"phint" WithKey:@"bkrid" AndValue:[self getBkrid]]]];
-        [urlString appendString:[NSString stringWithFormat:@"&%@",[self getDataParam:@"phint" WithKey:@"r" AndValue:[self getRequestId]]]];
+        [urlString appendString:[NSString stringWithFormat:@"&%@",[self getDataParam:NULL WithKey:@"bkrid" AndValue:[self getBkrid]]]];
+        [urlString appendString:[NSString stringWithFormat:@"&%@",[self getDataParam:NULL WithKey:@"r" AndValue:[self getRequestId]]]];
         [urlString appendString:@"&ret=json"];
     }
 
@@ -1026,13 +1046,18 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
 
 - (NSString*) getDataParam:(NSString *)type WithKey:(NSString *)key AndValue:(NSString *)value {
     if(_useDirectHTTPCalls) {
-        if( value != NULL) {
-            return [NSString stringWithFormat:@"%@=%@", type, [self urlEncode:[NSString stringWithFormat:@"%@=%@", key, value]]];
+        if(value != NULL) {
+            if (type != NULL){
+                return [NSString stringWithFormat:@"%@=%@", type, [self urlEncode:[NSString stringWithFormat:@"%@=%@", key, value]]];
+            }
+            else{
+                return [NSString stringWithFormat:@"%@=%@", [self urlEncode:key], [self urlEncode:value]];
+            }
         } else {
             return [NSString stringWithFormat:@"%@=%@", type, key];
         }
     } else {
-        return value != NULL ? [NSString stringWithFormat:@"%@=%@", key, value] : key;
+        return value != NULL ? [NSString stringWithFormat:@"%@=%@", [self urlEncode:key], [self urlEncode:value]] : [self urlEncode:key];
     }
 }
 
