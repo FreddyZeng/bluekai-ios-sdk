@@ -22,7 +22,6 @@
 @end
 
 @interface BlueKai : NSObject <UIWebViewDelegate, UIGestureRecognizerDelegate, NSURLConnectionDelegate, NSURLConnectionDataDelegate> {
-    NSMutableData* receivedData;
 }
 
 /** Sets a delegate for callbacks from the BlueKai SDK

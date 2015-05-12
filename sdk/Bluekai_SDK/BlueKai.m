@@ -863,37 +863,35 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
 }
 
 - (void)startBackgroundJob:(NSDictionary *)dictionary {
-    if (_remainkeyValDict) {
-        [_remainkeyValDict removeAllObjects];
-    }
-    
     @autoreleasepool {
-        NSMutableString *url = [self constructUrl];
-        [_webUrl appendString:url];
-    }
-    
-    _alertShowBool = NO;
-    if(_useDirectHTTPCalls){
-        [self blueKaiLogger:_devMode withString:@"Sending URL directly to tags" withObject:_webUrl];
-        NSURL *directUrl = [NSURL URLWithString:[_webUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:directUrl];
-        [request setHTTPMethod:@"GET"];
-        
-        [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-        [request setValue:_userAgent forHTTPHeaderField:@"User-Agent"];
-        
-        @autoreleasepool {
-            NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
-            
-            // Run the currentRunLoop of your thread (Every thread comes with its own RunLoop)
-            [[NSRunLoop currentRunLoop] run];
-            
-            // Schedule your connection to run on threads runLoop.
-            [connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        if (_remainkeyValDict) {
+            [_remainkeyValDict removeAllObjects];
         }
         
-    } else {
-        [self updateWebview:_webUrl];
+        NSMutableString *url = [self constructUrl];
+        [_webUrl appendString:url];
+        
+        _alertShowBool = NO;
+        if(_useDirectHTTPCalls){
+            [self blueKaiLogger:_devMode withString:@"Sending URL directly to tags" withObject:_webUrl];
+            NSURL *directUrl = [NSURL URLWithString:[_webUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:directUrl];
+            [request setHTTPMethod:@"GET"];
+            
+            [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+            [request setValue:_userAgent forHTTPHeaderField:@"User-Agent"];
+            
+            NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
+                
+            // Run the currentRunLoop of your thread (Every thread comes with its own RunLoop)
+            [[NSRunLoop currentRunLoop] run];
+                
+            // Schedule your connection to run on threads runLoop.
+            [connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+            
+        } else {
+            [self updateWebview:_webUrl];
+        }
     }
 }
 
