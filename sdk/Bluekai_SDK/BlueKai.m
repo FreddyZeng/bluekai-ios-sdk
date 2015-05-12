@@ -866,12 +866,12 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
     if (_remainkeyValDict) {
         [_remainkeyValDict removeAllObjects];
     }
-
+    
     @autoreleasepool {
         NSMutableString *url = [self constructUrl];
         [_webUrl appendString:url];
     }
-
+    
     _alertShowBool = NO;
     if(_useDirectHTTPCalls){
         [self blueKaiLogger:_devMode withString:@"Sending URL directly to tags" withObject:_webUrl];
@@ -881,38 +881,44 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
         
         [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
         [request setValue:_userAgent forHTTPHeaderField:@"User-Agent"];
-        NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
-        [connection start];
+        
+        @autoreleasepool {
+            NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
+            
+            // Run the currentRunLoop of your thread (Every thread comes with its own RunLoop)
+            [[NSRunLoop currentRunLoop] run];
+            
+            // Schedule your connection to run on threads runLoop.
+            [connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        }
+        
     } else {
         [self updateWebview:_webUrl];
     }
 }
 
+// NSURLConnectionDelegate methods
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
+    NSLog(@"Connection failed with error: %@",[error localizedDescription]);
+}
+
+// NSURLConnectionDataDelegate methods
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+    
+}
+
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-    // Append the new data to receivedData.
-    // receivedData is an instance variable declared elsewhere.
-    [receivedData appendData:data];
+    
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    // A response has been received, this is where we initialize the instance var you created
-    // so that we can append data to it in the didReceiveData method
-    // Furthermore, this method is called each time there is a redirect so reinitializing it
-    // also serves to clear it
-    receivedData = [[NSMutableData alloc] init];
-    int statusCode = [(NSHTTPURLResponse*)response statusCode];
-
-    [self blueKaiLogger:_devMode withString: [NSString stringWithFormat:@"Response code: %d", statusCode] withObject:NULL];
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+{
 }
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    // The request has failed for some reason!
-    // Check the error var
-    [self blueKaiLogger:_devMode withString: [NSString stringWithFormat:@"Failed with error"] withObject:error];
-}
-
-
 
 - (void)drawWebFrame:(UIWebView *)webView {
     webView.frame = CGRectMake(10, 10, 300, 390);

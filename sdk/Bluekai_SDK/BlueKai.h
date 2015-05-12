@@ -21,7 +21,7 @@
 - (void)onDataPosted:(BOOL)status;
 @end
 
-@interface BlueKai : NSObject <UIWebViewDelegate, UIGestureRecognizerDelegate, NSURLConnectionDelegate> {
+@interface BlueKai : NSObject <UIWebViewDelegate, UIGestureRecognizerDelegate, NSURLConnectionDelegate, NSURLConnectionDataDelegate> {
     NSMutableData* receivedData;
 }
 
