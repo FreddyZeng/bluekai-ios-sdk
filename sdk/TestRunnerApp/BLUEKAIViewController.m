@@ -21,20 +21,20 @@ BlueKai      *blueKaiSDK;
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
-    blueKaiSDK = [[BlueKai alloc] initWithSiteId:@"2"
-                                  withAppVersion:@"1.0"
-                                        withIdfa:@"TEST123"
-                                        withView:self
-                                     withDevMode:NO];
+//    blueKaiSDK = [[BlueKai alloc] initWithSiteId:@"2"
+//                                  withAppVersion:@"1.0"
+//                                        withIdfa:@"TEST123"
+//                                        withView:self
+//                                     withDevMode:NO];
     
-//    blueKaiSDK = [[BlueKai alloc] initDirectAutoIdfaEnabledWithSiteId:@"2" withAppVersion:@"1.0" withDevMode:YES];
+    blueKaiSDK = [[BlueKai alloc] initDirectAutoIdfaEnabledWithSiteId:@"2" withAppVersion:@"1.0" withDevMode:YES];
     
     
     #if !__has_feature(objc_arc)
     [blueKaiSDK retain];
     #endif
     
-    [blueKaiSDK setUseHttps:YES];
+    //[blueKaiSDK setUseHttps:NO];
     
     blueKaiSDK.delegate = (id) self;
     
@@ -44,7 +44,6 @@ BlueKai      *blueKaiSDK;
     
     [blueKaiSDK updateWithDictionary:@{@"key1":@"value1", @"key2":@"value2"}];
 
-    
 }
 
 - (void)didReceiveMemoryWarning

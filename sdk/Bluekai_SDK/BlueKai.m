@@ -31,7 +31,7 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
         _useDirectHTTPCalls = YES;
         _siteId = nil;
         _idfa = nil;
-        _useHttps = YES;
+        _useHttps = NO;
         _devMode = NO;
         _optInPreference = YES;
         _userDefaults = [NSUserDefaults standardUserDefaults];
@@ -192,6 +192,7 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
 - (id)initDirectAutoIdfaEnabledWithSiteId:(NSString *)siteID withAppVersion:(NSString *)version withDevMode:(BOOL)devMode{
     //TO-DO Add more properties about User-Agent here
     NSString *userAgent = @"iPhone OS";
+    _useHttps = YES;
     return [self initDirectWithSiteId:siteID withAppVersion:version withIdfa:[self identifierForAdvertising] withUserAgent:userAgent withDevMode:devMode];
 }
 
