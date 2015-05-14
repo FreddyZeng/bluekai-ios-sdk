@@ -192,6 +192,9 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
 - (id)initDirectAutoIdfaEnabledWithSiteId:(NSString *)siteID withAppVersion:(NSString *)version withDevMode:(BOOL)devMode{
     //TO-DO Add more properties about User-Agent here
     NSString *userAgent = @"iPhone OS";
+    //UIWebView* webView = [[UIWebView alloc] initWithFrame: CGRectMake(0,0,0,0)];
+    //NSString* secretAgent = [webView stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
+    //[webView release];
     _useHttps = YES;
     return [self initDirectWithSiteId:siteID withAppVersion:version withIdfa:[self identifierForAdvertising] withUserAgent:userAgent withDevMode:devMode];
 }
