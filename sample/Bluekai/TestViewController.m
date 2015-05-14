@@ -74,6 +74,9 @@
                                         withIdfa:configDict[@"idfaId"]
                                         withView:self
                                      withDevMode:[configDict[@"devMode"] boolValue]];
+    
+    // UNCOMMENT LINE BELOW FOR DIRECT CONNECTION TO TAGS ENDPOINT
+    // blueKaiSDK = [[BlueKai alloc] initDirectAutoIdfaEnabledWithSiteId:@"2" withAppVersion:@"1.0" withDevMode:YES];
 
     [blueKaiSDK setUseHttps:[configDict[@"useHttps"] boolValue]];
     blueKaiSDK.delegate = (id) self;
