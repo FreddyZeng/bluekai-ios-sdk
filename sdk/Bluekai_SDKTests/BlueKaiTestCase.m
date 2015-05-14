@@ -18,11 +18,10 @@
 @interface BlueKai ()
 // Testable private methods
 - (void)writeStringToKeyValueFile:(NSString *)aString;
-- (NSString *)readStringFromKeyValueFile;
 - (NSString *)getKeyValueJSON:(NSMutableDictionary *)keyValues;
 - (NSDictionary *)getKeyValueDictionary:(NSString *)jsonString;
 - (void)writeStringToAttemptsFile:(NSString *)aString;
-- (NSString *)readStringFromAttemptsFile;
+- (NSString *)readStringFromFile:(NSString *)fileString;
 - (NSString *)getAttemptsJSON:(NSMutableDictionary *)keyValues;
 - (NSDictionary *)getAttemptsDictionary:(NSString *)jsonString;
 - (void)saveOptInPrefsOnServer;
@@ -228,7 +227,7 @@
     NSString *fileAtPath = [filePath stringByAppendingPathComponent:fileName];
     [[expected dataUsingEncoding:NSUTF8StringEncoding] writeToFile:fileAtPath atomically:NO];
 
-    XCTAssertEqualObjects(expected, [blueKaiSdk readStringFromKeyValueFile], @"Data read from file differ from expected string");
+    XCTAssertEqualObjects(expected, [blueKaiSdk readStringFromFile:@"user_data.bk"], @"Data read from file differ from expected string");
 }
 
 - (void)testCanGetKeyValueJSON
@@ -266,7 +265,7 @@
     [[NSFileManager defaultManager] createFileAtPath:fileAtPath contents:nil attributes:nil];
     [[attemptsString dataUsingEncoding:NSUTF8StringEncoding] writeToFile:fileAtPath atomically:NO];
 
-    XCTAssertEqualObjects(attemptsString, [blueKaiSdk readStringFromAttemptsFile], @"Attempts strings don't match");
+    XCTAssertEqualObjects(attemptsString, [blueKaiSdk readStringFromFile:@"attempts.bk"], @"Attempts strings don't match");
 }
 
 - (void)testGetAttemptsJSON

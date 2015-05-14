@@ -2,7 +2,6 @@
 #import "BlueKai.h"
 #import "BlueKai_Protected.h"
 #import "BlueKai_Reachability.h"
-#import "BlueKai_SBJSON.h"
 #import <AdSupport/AdSupport.h>
 
 @implementation BlueKai {
@@ -86,7 +85,7 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
             [[NSFileManager defaultManager] createFileAtPath:atmt_fileAtPath contents:nil attributes:nil];
         }
 
-        _keyValDict = [[NSMutableDictionary alloc] initWithDictionary:[self getKeyValueDictionary:[self readStringFromKeyValueFile]]];
+        _keyValDict = [[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:@"user_data.bk"]]];
 
         if ([[_keyValDict allKeys] count] > 1) {
             _numberOfRunningRequests = -1;
@@ -120,6 +119,11 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
         [self baseInitializaton];
         _appVersion = version;
         _idfa = idfa;
+        
+        #if !__has_feature(objc_arc)
+        [_idfa retain];
+        #endif
+        
         _devMode = devMode;
         _siteId = siteID;
         _useDirectHTTPCalls = YES;
@@ -156,7 +160,7 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
             [[NSFileManager defaultManager] createFileAtPath:atmt_fileAtPath contents:nil attributes:nil];
         }
         
-        _keyValDict = [[NSMutableDictionary alloc] initWithDictionary:[self getKeyValueDictionary:[self readStringFromKeyValueFile]]];
+        _keyValDict = [[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:@"user_data.bk"]]];
         
         if ([[_keyValDict allKeys] count] > 1) {
             _numberOfRunningRequests = -1;
@@ -232,7 +236,7 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
         _webUrl = [[NSMutableString alloc] init];
     }
 
-    _keyValDict = [[NSMutableDictionary alloc] initWithDictionary:[self getKeyValueDictionary:[self readStringFromKeyValueFile]]];
+    _keyValDict = [[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:@"user_data.bk"]]];
 
     if ([[_keyValDict allKeys] count] > 0) {
         _numberOfRunningRequests = -1;
@@ -475,39 +479,30 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
     [[aString dataUsingEncoding:NSUTF8StringEncoding] writeToFile:fileAtPath atomically:NO];
 }
 
-- (NSString *)readStringFromKeyValueFile {
-    // Build the path...
-    NSString *filePath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0];
-    NSString *fileName = @"user_data.bk";
-    NSString *fileAtPath = [filePath stringByAppendingPathComponent:fileName];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:fileAtPath]) {
-        [[NSFileManager defaultManager] createFileAtPath:fileAtPath contents:nil attributes:nil];
-        return [NSString string];
-    } else {
-        return [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:fileAtPath] encoding:NSUTF8StringEncoding];
-    }
-    // The main act...
-}
+- (NSString *)dictionaryToJSONString:(NSMutableDictionary *)keyValues {
+        @try {
+            NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithDictionary:keyValues];
+            
+            NSError *error;
 
-- (NSString *)getKeyValueJSON:(NSMutableDictionary *)keyValues {
-    @try {
-        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithDictionary:keyValues];
-        BlueKai_SBJsonWriter *sb = [[BlueKai_SBJsonWriter alloc] init];
-        NSString *jsonString = [sb stringWithObject:dictionary];
-
-        return jsonString;
-    }
-    @catch (NSException *ex) {
-        [self blueKaiLogger:_devMode withString:@"Exception is " withObject:ex];
-
-        return nil;
-    }
-}
-
-- (NSDictionary *)getKeyValueDictionary:(NSString *)jsonString {
-    BlueKai_SBJSON *sparser = [[BlueKai_SBJSON alloc] init];
-    NSDictionary *realdata = (NSDictionary *) [sparser objectWithString:jsonString error:nil];
-    return realdata;
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary
+                                                               options:(NSJSONWritingOptions) (0)
+                                                                 error:&error];
+            
+            NSString * jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            
+            #if !__has_feature(objc_arc)
+            [dictionary release];
+            return [jsonString autorelease];
+            #else
+            return jsonString;
+            #endif
+        }
+        @catch (NSException *ex) {
+            [self blueKaiLogger:_devMode withString:@"Exception is " withObject:ex];
+            
+            return nil;
+        }
 }
 
 - (void)writeStringToAttemptsFile:(NSString *)aString {
@@ -526,36 +521,37 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
     [[aString dataUsingEncoding:NSUTF8StringEncoding] writeToFile:fileAtPath atomically:NO];
 }
 
-- (NSString *)readStringFromAttemptsFile {
+- (NSString *)readStringFromFile:(NSString *) fileString {
     // Build the path...
-    NSString *filePath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0];
-    NSString *fileName = @"attempts.bk";
-    NSString *fileAtPath = [filePath stringByAppendingPathComponent:fileName];
+    //NSString *filePath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0];
+    //NSString *fileName = @"attempts.bk";
+    //NSString *fileAtPath = [filePath stringByAppendingPathComponent:fileName];
 
+    #if !__has_feature(objc_arc)
+    NSArray *paths = [[[NSArray alloc] initWithArray:NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)] autorelease];
+    NSString *filePath = [[[NSString alloc] initWithFormat:@"%@", [paths objectAtIndex:0]] autorelease];
+    NSString *fileAtPath = [[[NSString alloc] initWithFormat:@"%@", [filePath stringByAppendingPathComponent:fileString]] autorelease];
+    
+    // The main act...
+    return [[[NSString alloc] initWithData:[NSData dataWithContentsOfFile:fileAtPath] encoding:NSUTF8StringEncoding] autorelease];
+    #else
+    NSArray *paths = [[NSArray alloc] initWithArray:NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)];
+    NSString *filePath = [[NSString alloc] initWithFormat:@"%@", [paths objectAtIndex:0]];
+    NSString *fileAtPath = [[NSString alloc] initWithFormat:@"%@", [filePath stringByAppendingPathComponent:fileString]];
+    
     // The main act...
     return [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:fileAtPath] encoding:NSUTF8StringEncoding];
-}
-
-- (NSString *)getAttemptsJSON:(NSMutableDictionary *)keyValues {
-    [self blueKaiLogger:_devMode withString:@"getAttemptsJSON: " withObject:keyValues];
-
-    @try {
-        NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithDictionary:keyValues];
-        BlueKai_SBJsonWriter *sb = [[BlueKai_SBJsonWriter alloc] init];
-        NSString *jsonString = [sb stringWithObject:dict];
-        return jsonString;
+    #endif
     }
 
-    @catch (NSException *ex) {
-        [self blueKaiLogger:_devMode withString:@"Exception is " withObject:ex];
-        return nil;
-    }
-}
-
-- (NSDictionary *)getAttemptsDictionary:(NSString *)jsonString {
+- (NSDictionary *)jsonStringToDictionary:(NSString *)jsonString {
     [self blueKaiLogger:_devMode withString:@"getAttemptsDictionary" withObject:jsonString];
-    BlueKai_SBJSON *sparser = [[BlueKai_SBJSON alloc] init];
-    NSDictionary *realData = (NSDictionary *) [sparser objectWithString:jsonString error:nil];
+    
+    NSData *objectData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *jsonError;
+    NSDictionary *realData = [NSJSONSerialization JSONObjectWithData:objectData
+                                                         options:NSJSONReadingMutableContainers
+                                                           error:&jsonError];
     return realData;
 }
 
@@ -595,8 +591,15 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
 
         for (int i = 0; i < [[_keyValDict allKeys] count]; i++) {
             if (![_remainkeyValDict valueForKey:[_keyValDict allKeys][i]]) {
-                NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithDictionary:[self getKeyValueDictionary:[self readStringFromKeyValueFile]]];
-                NSMutableDictionary *atmt_dictionary = [[NSMutableDictionary alloc] initWithDictionary:[self getAttemptsDictionary:[self readStringFromAttemptsFile]]];
+                
+                #if !__has_feature(objc_arc)
+                NSMutableDictionary *dictionary = [[[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:@"user_data.bk"]]] autorelease];
+                NSMutableDictionary *atmt_dictionary = [[[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:@"attempts.bk"]]] autorelease];
+                #else
+                NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:@"user_data.bk"]]];
+                NSMutableDictionary *atmt_dictionary = [[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:@"attempts.bk"]]];
+                #endif
+                
                 int attempts = [atmt_dictionary[[_keyValDict allKeys][i]] intValue];
 
                 if (attempts == 0) {
@@ -612,8 +615,8 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
                     }
                 }
 
-                [self writeStringToKeyValueFile:[self getKeyValueJSON:dictionary]];
-                [self writeStringToAttemptsFile:[self getAttemptsJSON:atmt_dictionary]];
+                [self writeStringToKeyValueFile:[self dictionaryToJSONString:dictionary]];
+                [self writeStringToAttemptsFile:[self dictionaryToJSONString:dictionary]];
             }
         }
 
@@ -630,7 +633,12 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
 
 - (void)updateWebview:(NSString *)url {
     if (!_useDirectHTTPCalls) {
-        [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
+        @autoreleasepool {
+            NSURL * nurl = [NSURL URLWithString:url];
+            NSURLRequest * nsur = [NSURLRequest requestWithURL:nurl];
+            [_webView loadRequest:nsur];
+        }
+       
     }
 }
 
@@ -651,15 +659,15 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
                 //Delete the key and value pairs from database after sent to server.
                 for (int k = 0; k < [_keyValDict count]; k++) {
                     if ([_remainkeyValDict valueForKey:[_keyValDict allKeys][k]] != NULL) {
-                        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithDictionary:[self getKeyValueDictionary:[self readStringFromKeyValueFile]]];
-                        NSMutableDictionary *atmt_dictionary = [[NSMutableDictionary alloc] initWithDictionary:[self getAttemptsDictionary:[self readStringFromAttemptsFile]]];
+                        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:@"user_data.bk"]]];
+                        NSMutableDictionary *atmt_dictionary = [[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:@"attempts.bk"]]];
                         int attempts = [atmt_dictionary[[_keyValDict allKeys][k]] intValue];
 
                         if (attempts != 0) {
                             [dictionary removeObjectForKey:[_keyValDict allKeys][k]];
                             [atmt_dictionary removeObjectForKey:[_keyValDict allKeys][k]];
-                            [self writeStringToKeyValueFile:[self getKeyValueJSON:dictionary]];
-                            [self writeStringToAttemptsFile:[self getAttemptsJSON:atmt_dictionary]];
+                            [self writeStringToKeyValueFile:[self dictionaryToJSONString:dictionary]];
+                            [self writeStringToAttemptsFile:[self dictionaryToJSONString:dictionary]];
                         }
                     }
                 }
@@ -863,6 +871,7 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
 }
 
 - (void)startBackgroundJob:(NSDictionary *)dictionary {
+    
     @autoreleasepool {
         if (_remainkeyValDict) {
             [_remainkeyValDict removeAllObjects];
@@ -882,10 +891,10 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
             [request setValue:_userAgent forHTTPHeaderField:@"User-Agent"];
             
             NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
-                
+            
             // Run the currentRunLoop of your thread (Every thread comes with its own RunLoop)
             [[NSRunLoop currentRunLoop] run];
-                
+            
             // Schedule your connection to run on threads runLoop.
             [connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
             
@@ -893,6 +902,7 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
             [self updateWebview:_webUrl];
         }
     }
+    
 }
 
 // NSURLConnectionDelegate methods
@@ -916,20 +926,23 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
+    
 }
 
 - (void)drawWebFrame:(UIWebView *)webView {
-    webView.frame = CGRectMake(10, 10, 300, 390);
-    _cancelButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [_cancelButton setTitle:@"Close" forState:UIControlStateNormal];
-    [[_cancelButton layer] setBorderWidth:1.0f];
-    [[_cancelButton layer] setCornerRadius:8.0f];
-    [[_cancelButton layer] setBorderColor:[UIColor lightGrayColor].CGColor];
-    _cancelButton.frame = CGRectMake(245, 26, 55, 25);
-    _cancelButton.tag = 10;
-    [_cancelButton addTarget:self action:@selector(Cancel:) forControlEvents:UIControlEventTouchUpInside];
-    _cancelButton.hidden = YES;
-    [_viewController.view addSubview:_cancelButton];
+    @autoreleasepool {
+        webView.frame = CGRectMake(10, 10, 300, 390);
+        _cancelButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [_cancelButton setTitle:@"Close" forState:UIControlStateNormal];
+        [[_cancelButton layer] setBorderWidth:1.0f];
+        [[_cancelButton layer] setCornerRadius:8.0f];
+        [[_cancelButton layer] setBorderColor:[UIColor lightGrayColor].CGColor];
+        _cancelButton.frame = CGRectMake(245, 26, 55, 25);
+        _cancelButton.tag = 10;
+        [_cancelButton addTarget:self action:@selector(Cancel:) forControlEvents:UIControlEventTouchUpInside];
+        _cancelButton.hidden = YES;
+        [_viewController.view addSubview:_cancelButton];
+    }
 }
 
 - (void)uploadIfNetworkIsAvailable {
@@ -940,15 +953,14 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
         _numberOfRunningRequests = -1;
         _webLoaded = YES;
 
-        BlueKai_Reachability *networkReachability = [BlueKai_Reachability reachabilityForInternetConnection];
-        NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
-
-        if (networkStatus != NotReachable) {
-            [self startDataUpload];
-        } else {
-            [self webView:nil didFailLoadWithError:nil];
-        }
-
+            BlueKai_Reachability *networkReachability = [BlueKai_Reachability reachabilityForInternetConnection];
+            NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
+            if (networkStatus != NotReachable) {
+                [self startDataUpload];
+            } else {
+                [self webView:nil didFailLoadWithError:nil];
+            }
+        
     } else {
         if (!_webView.hidden) {
             _webView.hidden = YES;
@@ -959,14 +971,23 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
 - (NSMutableString *)constructUrl {
     
     NSMutableString *urlString;
+
     if(_useDirectHTTPCalls){
+        #if !__has_feature(objc_arc)
+        urlString = [[[NSMutableString alloc] initWithString:[NSString stringWithFormat:@"%@site/%@/?", (_useHttps ? BLUEKAI_DATA_URL_SECURE : BLUEKAI_DATA_URL), _siteId]] autorelease];
+        #else
         urlString = [[NSMutableString alloc] initWithString:[NSString stringWithFormat:@"%@site/%@/?", (_useHttps ? BLUEKAI_DATA_URL_SECURE : BLUEKAI_DATA_URL), _siteId]];
+        #endif
     } else {
         NSString *serverURL = MOBILE_PROXY_PARTIAL_URL;
         NSMutableString *protocol = [NSMutableString stringWithFormat:@"%@", (_useHttps ? @"https" : @"http")];
         NSMutableString *endPoint = [NSMutableString stringWithFormat:@"%@", (_devMode ? @"m-sandbox.html" : @"m.html")];
         
+        #if !__has_feature(objc_arc)
+        urlString = [[[NSMutableString alloc] initWithString:[NSString stringWithFormat:@"%@%@%@?site=%@&", protocol, serverURL, endPoint, _siteId]] autorelease];
+        #else
         urlString = [[NSMutableString alloc] initWithString:[NSString stringWithFormat:@"%@%@%@?site=%@&", protocol, serverURL, endPoint, _siteId]];
+        #endif
     }
 
     [urlString appendString:[self getDataParam:@"phint" WithKey:@"appVersion" AndValue:_appVersion]];
@@ -1020,7 +1041,13 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
 - (void) addWebView {
     _webLoaded = NO;
     _useDirectHTTPCalls = NO; // using web view-based communication
+    
+    #if !__has_feature(objc_arc)
+    _webView = [[[UIWebView alloc] init] autorelease];
+    #else
     _webView = [[UIWebView alloc] init];
+    #endif
+    
     _webView.scrollView.scrollsToTop = NO;
     _webView.delegate = self;
     _webView.layer.cornerRadius = 5.0f;

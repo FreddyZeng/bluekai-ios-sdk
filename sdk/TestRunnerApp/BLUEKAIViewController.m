@@ -25,21 +25,24 @@ BlueKai      *blueKaiSDK;
 //                                  withAppVersion:@"1.0"
 //                                        withIdfa:@"TEST123"
 //                                        withView:self
-//                                     withDevMode:YES];
+//                                     withDevMode:NO];
     
     blueKaiSDK = [[BlueKai alloc] initDirectAutoIdfaEnabledWithSiteId:@"2" withAppVersion:@"1.0" withDevMode:YES];
+    
+    
+    #if !__has_feature(objc_arc)
+    [blueKaiSDK retain];
+    #endif
     
     [blueKaiSDK setUseHttps:YES];
     
     blueKaiSDK.delegate = (id) self;
     
     [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"settings"];
-
-  
 }
 - (IBAction)test:(id)sender {
     
-    [blueKaiSDK updateWithDictionary:@{@"key1":@"value1"}];
+    [blueKaiSDK updateWithDictionary:@{@"key1":@"value1", @"key2":@"value2"}];
 
     
 }

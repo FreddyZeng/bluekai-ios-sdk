@@ -27,7 +27,11 @@
 /** Sets a delegate for callbacks from the BlueKai SDK
 * Works in conjunction with the `onDataPosted` method
 */
-@property (nonatomic, weak) id <BlueKaiOnDataPostedListener> delegate;
+#if !__has_feature(objc_arc)
+@property (nonatomic) id <BlueKaiOnDataPostedListener> delegate;
+#else
+@property (nonatomic,weak) id <BlueKaiOnDataPostedListener> delegate;
+#endif
 
 /** Sets iOS app version
 *
