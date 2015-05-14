@@ -25,12 +25,6 @@
 		24572616192C3EAF00253FDB /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 245725EC192C38FE00253FDB /* Main_iPhone.storyboard */; };
 		24572617192C3EAF00253FDB /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 245725EF192C38FE00253FDB /* Main_iPad.storyboard */; };
 		248828341935026E00CF851E /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 248828331935026E00CF851E /* CFNetwork.framework */; };
-		24DBFE5318FDD78F0069F878 /* NSObject+BlueKai_SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DBFE4818FDD78F0069F878 /* NSObject+BlueKai_SBJSON.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		24DBFE5418FDD78F0069F878 /* NSString+BlueKai_SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DBFE4A18FDD78F0069F878 /* NSString+BlueKai_SBJSON.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		24DBFE5518FDD78F0069F878 /* BlueKai_SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DBFE4C18FDD78F0069F878 /* BlueKai_SBJSON.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		24DBFE5618FDD78F0069F878 /* BlueKai_SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DBFE4E18FDD78F0069F878 /* BlueKai_SBJsonBase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		24DBFE5718FDD78F0069F878 /* BlueKai_SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DBFE5018FDD78F0069F878 /* BlueKai_SBJsonParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		24DBFE5818FDD78F0069F878 /* BlueKai_SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DBFE5218FDD78F0069F878 /* BlueKai_SBJsonWriter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		24E4B864192BCF3B001B746B /* BlueKaiTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 241DB7051926C999006FEFC5 /* BlueKaiTestCase.m */; };
 		24FDF08E19255E26004755CD /* BlueKaiTests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 24FDF08D19255E26004755CD /* BlueKaiTests-Info.plist */; };
 		24FDF09519255FC1004755CD /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24FDF09419255FC1004755CD /* XCTest.framework */; };
@@ -443,14 +437,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				24DBFE5518FDD78F0069F878 /* BlueKai_SBJSON.m in Sources */,
-				24DBFE5418FDD78F0069F878 /* NSString+BlueKai_SBJSON.m in Sources */,
 				D79AF762173A1AA7002E0A0B /* BlueKai.m in Sources */,
-				24DBFE5618FDD78F0069F878 /* BlueKai_SBJsonBase.m in Sources */,
-				24DBFE5818FDD78F0069F878 /* BlueKai_SBJsonWriter.m in Sources */,
 				D79AF792173A2151002E0A0B /* BlueKai_Reachability.m in Sources */,
-				24DBFE5718FDD78F0069F878 /* BlueKai_SBJsonParser.m in Sources */,
-				24DBFE5318FDD78F0069F878 /* NSObject+BlueKai_SBJSON.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
