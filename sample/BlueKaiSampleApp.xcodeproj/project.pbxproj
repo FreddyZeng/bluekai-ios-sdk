@@ -131,9 +131,9 @@
 		B701E7E51759A26F008C3775 = {
 			isa = PBXGroup;
 			children = (
+				B701E8231759A82C008C3775 /* BlueKai_SDK Library */,
 				B701E7FA1759A26F008C3775 /* BlueKaiSampleApp */,
 				2460701F19131CFE000BABDD /* Icons */,
-				B701E8231759A82C008C3775 /* BlueKai_SDK Library */,
 				B701E7F31759A26F008C3775 /* Frameworks */,
 				B701E7F11759A26F008C3775 /* Products */,
 			);

@@ -191,7 +191,7 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
 
 - (id)initDirectAutoIdfaEnabledWithSiteId:(NSString *)siteID withAppVersion:(NSString *)version withDevMode:(BOOL)devMode{
     //TO-DO Add more properties about User-Agent here
-    NSString *userAgent = @"iPhone OS";
+    NSString *userAgent = @"iOS BlueKaiSDK";
     //UIWebView* webView = [[UIWebView alloc] initWithFrame: CGRectMake(0,0,0,0)];
     //NSString* secretAgent = [webView stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
     //[webView release];
@@ -887,7 +887,7 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
         _alertShowBool = NO;
         if(_useDirectHTTPCalls){
             [self blueKaiLogger:_devMode withString:@"Sending URL directly to tags" withObject:_webUrl];
-            NSURL *directUrl = [NSURL URLWithString:[_webUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+            NSURL *directUrl = [NSURL URLWithString:_webUrl];
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:directUrl];
             [request setHTTPMethod:@"GET"];
             
@@ -978,9 +978,9 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
 
     if(_useDirectHTTPCalls){
         #if !__has_feature(objc_arc)
-        urlString = [[[NSMutableString alloc] initWithString:[NSString stringWithFormat:@"%@site/%@/?", (_useHttps ? BLUEKAI_DATA_URL_SECURE : BLUEKAI_DATA_URL), _siteId]] autorelease];
+        urlString = [[[NSMutableString alloc] initWithString:[NSString stringWithFormat:@"%@site/%@?", (_useHttps ? BLUEKAI_DATA_URL_SECURE : BLUEKAI_DATA_URL), _siteId]] autorelease];
         #else
-        urlString = [[NSMutableString alloc] initWithString:[NSString stringWithFormat:@"%@site/%@/?", (_useHttps ? BLUEKAI_DATA_URL_SECURE : BLUEKAI_DATA_URL), _siteId]];
+        urlString = [[NSMutableString alloc] initWithString:[NSString stringWithFormat:@"%@site/%@?", (_useHttps ? BLUEKAI_DATA_URL_SECURE : BLUEKAI_DATA_URL), _siteId]];
         #endif
     } else {
         NSString *serverURL = MOBILE_PROXY_PARTIAL_URL;

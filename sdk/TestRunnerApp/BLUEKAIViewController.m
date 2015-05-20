@@ -21,14 +21,15 @@ BlueKai      *blueKaiSDK;
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
-//    blueKaiSDK = [[BlueKai alloc] initWithSiteId:@"2"
-//                                  withAppVersion:@"1.0"
-//                                        withIdfa:@"TEST123"
-//                                        withView:self
-//                                     withDevMode:NO];
+    blueKaiSDK = [[BlueKai alloc] initWithSiteId:@"19198"
+                                  withAppVersion:@"1.0"
+                                        withIdfa:@"ASHDJHJ-1231241-ASDASD"
+                                        withView:self
+                                     withDevMode:YES];
     
-    blueKaiSDK = [[BlueKai alloc] initDirectAutoIdfaEnabledWithSiteId:@"2" withAppVersion:@"1.0" withDevMode:YES];
+//    blueKaiSDK = [[BlueKai alloc] initDirectAutoIdfaEnabledWithSiteId:@"19198" withAppVersion:@"1.0" withDevMode:YES];
     
+    blueKaiSDK.useHttps = NO;
     
     #if !__has_feature(objc_arc)
     [blueKaiSDK retain];
@@ -38,11 +39,11 @@ BlueKai      *blueKaiSDK;
     
     blueKaiSDK.delegate = (id) self;
     
-    [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"settings"];
+    [blueKaiSDK setOptInPreference:YES];
 }
 - (IBAction)test:(id)sender {
     
-    [blueKaiSDK updateWithDictionary:@{@"key1":@"value1", @"key2":@"value2"}];
+    [blueKaiSDK updateWithDictionary:@{@"IAB2":@"1", @"IAB22_gc_pgc":@"1"}];
 
 }
 
