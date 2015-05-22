@@ -13,9 +13,9 @@ But before you ship, be sure to contact your BlueKai account manager for your co
 
 ### Add BlueKai SDK to Project
 
-In XCode, drag the BlueKai_SDK folder into the project directory as shown. 
+In XCode, drag the "BlueKai_SDK Library" folder into the project directory as shown. 
 
-   ![Screenshot](http://bluekai.github.io/images/ios/image001.png)
+   ![Screenshot](http://bluekai.github.io/images/ios/DragNDrop.png)
 
 When you do so you will get a prompt like the one below. Choose the
 option shown in the screen. This is a suggested mechanism and you can
@@ -25,24 +25,21 @@ choose the option that fits your environment.
 
 ### Add Dependencies 
 
-Add `libsqlite3.0.dylib`, `SystemConfiguration.framework` to your
+Add `AdSupport.framework`, `SystemConfiguration.framework` to your
 project. To do so, please follow these steps.
 
-+ Select "Targets" from your project
++ Go to your project properties
 
-    ![Screenshot](http://bluekai.github.io/images/ios/image005.png)
+    ![Screenshot](http://bluekai.github.io/images/ios/Libraries.png)
 + Select "Build Phases"
 + Click on "+" symbol in "Link Binary With Libraries" panel
-+ Type "libsqli" in the search box
-+ Select "`libsqlite3.dylib`" from the list
++ Type "AdSupp" in the search box
++ Select "`AdSupport.framework`" from the list
 + Click on the "Add" button
     
-    ![Screenshot](http://bluekai.github.io/images/ios/image007.png)
-+ Repeat this process to add SystemConfiguration.framework. Type "system" in the search box
++ Repeat this process to add SystemConfiguration.framework. Type "System" in the search box
 + Select "SystemConfiguration.framework" from the list
 + Click on the "Add" button
-
-    ![Screenshot](http://bluekai.github.io/images/ios/image009.png)
 
 ### Include BlueKai iOS SDK 
 
