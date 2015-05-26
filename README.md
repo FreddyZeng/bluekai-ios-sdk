@@ -210,6 +210,12 @@ Use HTTPS transfer protocol
 
 ### Methods
 
+**NEW** Create the instance for Bluekai SDK with required arguments for direct connection (IDFA is grabbed automatically if user has not disabled it). This method is recommended for applications that require high memory efficiency. Uses NSURLConnection vs. UIWebView.
+
+```objective-c
+- (id)initDirectAutoIdfaEnabledWithSiteId:(NSString *)siteID withAppVersion:(NSString *)version withDevMode:(BOOL)devMode;
+```
+
 Create the instance for Bluekai SDK with required arguments (with IDFA support).
 ```objective-c
 - (id)initWithSiteId:(NSString *)siteId withAppVersion:(NSString *)version withIdfa:(NSString *)idfa withView:(UIViewController *)view withDevMode(BOOL)value
@@ -250,7 +256,7 @@ Allows your app to receive a callback from the BlueKai SDK when data has been po
 - (void)onDataPosted:(BOOL)status;
 ```
 
-### Deprecated Methods
+f### Deprecated Methods
 
 **[DEPRECATED]**
 Init a BlueKai object

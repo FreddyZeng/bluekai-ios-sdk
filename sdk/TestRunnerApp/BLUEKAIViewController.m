@@ -50,6 +50,11 @@ BlueKai      *blueKaiSDK;
 
 }
 
+- (void)appCameToForeground
+{
+    [blueKaiSDK resume];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
