@@ -36,11 +36,12 @@ project. To do so, please follow these steps.
 + Type "AdSupp" in the search box
 + Select "`AdSupport.framework`" from the list
 + Click on the "Add" button
+    
     ![Screenshot](http://bluekai.github.io/images/ios/AdSupport.png)
-
 + Repeat this process to add SystemConfiguration.framework. Type "System" in the search box
 + Select "SystemConfiguration.framework" from the list
 + Click on the "Add" button
+    
     ![Screenshot](http://bluekai.github.io/images/ios/SystemConfig.png)
 
 ### Include BlueKai iOS SDK 
