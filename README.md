@@ -1,9 +1,9 @@
 ## Integrating the BlueKai SDK
 ### Download the BlueKai SDK for iOS
 
-http://bluekai.github.io/bluekai-ios-sdk-static-libs.zip
+http://bluekai.github.io/bluekai-ios-sdk-static-libs-arm64.zip (ARC-enabled with 64-bit support)
 
-http://bluekai.github.io/bluekai-ios-sdk-static-libs-arm64.zip (64-bit)
+http://bluekai.github.io/bluekai-ios-sdk-static-libs-arm64.zip (ARC-disabled with 64-bit support, if you need Manual Garbage Collection)
 
 ### Obtain BlueKai site ID
 
@@ -26,7 +26,7 @@ choose the option that fits your environment.
 ### Add Dependencies 
 
 Add `AdSupport.framework`, `SystemConfiguration.framework` to your
-project. To do so, please follow these steps.
+project. To do so, please follow these steps. Notice `AdSupport.framework` is only required if you need to support Apple IDFA.
 
 + Go to your project properties
 
@@ -106,7 +106,7 @@ To pass a single key value pair to BlueKai SDK, use the below code
 
 To pass multiple of key value pairs to BlueKai SDK, create an NSDictionary with key/value pairs and use the below method
 
-    [blueKaiSdk updateWithDictionary:dictionary];
+    [blueKaiSdk updateWithDictionary:@{@"myKey1":@"myValue1", @"myKey2":@"myValue2"}];
 
 ### Resuming Data Post 
 
@@ -215,20 +215,47 @@ Create the instance for Bluekai SDK with required arguments (with IDFA support).
 - (id)initWithSiteId:(NSString *)siteId withAppVersion:(NSString *)version withIdfa:(NSString *)idfa withView:(UIViewController *)view withDevMode(BOOL)value
 ```
 
-Create the instance for Bluekai SDK with required arguments (without IDFA support). This method is preferred if you do not have an Appple IDFA id.
+Create the instance for Bluekai SDK with required arguments (without IDFA support). This method is preferred if you do not have an Apple IDFA id.
 ```objective-c
 - (id)initWithSiteId:(NSString *)siteId withAppVersion:(NSString *)version withView:(UIViewController *)view withDevMode(BOOL)value
-```
-
-**[DEPRECATED]**
-Init a BlueKai object
-```objective-c
-- (id)initWithArgs:(BOOL)value withSiteId:(NSString *)siteID withAppVersion:(NSString *)version withView:(UIViewController *)view
 ```
 
 Convenience constructor to initialize and get instance of BlueKai without arguments
 ```objective-c
 - (id)init
+```
+
+Method to resume BlueKai process after calling application resumes or comes to foreground. To use in onResume() of the calling activity foreground.
+```objective-c
+- (void)resume
+```
+
+Method to set user opt-in or opt-out preference
+```objective-c
+- (void) setOptInPreference:(BOOL)OptIn
+```
+
+Set key/value strings and send them to BlueKai server
+```objective-c
+- (void)updateWithKey:(NSString *)key andValue:(NSString *)value
+```
+
+Set key/value strings in a NSDictionary and send them to BlueKai server
+```objective-c
+- (void)updateWithDictionary:(NSDictionary *)dictionary
+```
+
+Allows your app to receive a callback from the BlueKai SDK when data has been posted to servers
+```objective-c
+- (void)onDataPosted:(BOOL)status;
+```
+
+### Deprecated Methods
+
+**[DEPRECATED]**
+Init a BlueKai object
+```objective-c
+- (id)initWithArgs:(BOOL)value withSiteId:(NSString *)siteID withAppVersion:(NSString *)version withView:(UIViewController *)view
 ```
 
 **[DEPRECATED]**
@@ -243,25 +270,10 @@ The same functionality as `showSettingsScreen` with ability to set custom backgr
 - (void)showSettingsScreenWithBackgroundColor:(UIColor *)color
 ```
 
-Method to resume BlueKai process after calling application resumes or comes to foreground. To use in onResume() of the calling activity foreground.
-```objective-c
-- (void)resume
-```
-
-Method to set user opt-in or opt-out preference
-```objective-c
-- (void) setOptInPreference:(BOOL)OptIn
-```
-
 **[DEPRECATED]**
 Method to set user opt-in or opt-out preference
 ```objective-c
 - (void) setPreference:(BOOL)optIn
-```
-
-Set key/value strings and send them to BlueKai server
-```objective-c
-- (void)updateWithKey:(NSString *)key andValue:(NSString *)value
 ```
 
 **[DEPRECATED]**
@@ -270,20 +282,10 @@ Set key/value strings and send them to BlueKai server
 - (void)put:(NSString *)key withValue:(NSString *)value
 ```
 
-Set key/value strings in a NSDictionary and send them to BlueKai server
-```objective-c
-- (void)updateWithDictionary:(NSDictionary *)dictionary
-```
-
 **[DEPRECATED]**
 Set key/value strings in a NSDictionary and send them to BlueKai server
 ```objective-c
 - (void)put:(NSDictionary *)dictionary
-```
-
-Allows your app to receive a callback from the BlueKai SDK when data has been posted to servers
-```objective-c
-- (void)onDataPosted:(BOOL)status;
 ```
 
 ## Updating the SDK 

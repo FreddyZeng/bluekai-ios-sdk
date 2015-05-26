@@ -40,6 +40,9 @@ BlueKai      *blueKaiSDK;
     blueKaiSDK.delegate = (id) self;
     
     [blueKaiSDK setOptInPreference:YES];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appCameToForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
+
 }
 - (IBAction)test:(id)sender {
     
