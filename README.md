@@ -102,7 +102,7 @@ The argument (`withView`) is a view to which the SDK can attach an invisible Web
 The argument (`withDevMode`) indicates whether you want developer mode. In this mode, a webview overlay will be displayed 
 with response from the BluaKai server. You should turn this feature off in your production code.
 
-#### 2. NSURLConnection - Direct Connection
+#### **NEW!** 2. NSURLConnection - Direct Connection
 If the host application does not want to initialize a UIWebView, you can use the new initializer to establish a direct connection to Bluekai. Similarly to the first approach, you can initialize the direct connection as such:
 
 ```objective-c
@@ -282,7 +282,7 @@ Allows your app to receive a callback from the BlueKai SDK when data has been po
 - (void)onDataPosted:(BOOL)status;
 ```
 
-f### Deprecated Methods
+### Deprecated Methods
 
 **[DEPRECATED]**
 Init a BlueKai object
