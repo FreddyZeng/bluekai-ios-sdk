@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BlueKai.h"
 
-@interface BLUEKAIViewController : UIViewController
+@interface BLUEKAIViewController : UIViewController <BlueKaiOnDataPostedListener>
 
 @end

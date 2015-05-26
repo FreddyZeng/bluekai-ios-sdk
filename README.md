@@ -71,7 +71,7 @@ In `ViewController.h` file, define an instance of BlueKai SDK.
 
 ### Initialize SDK 
 
-In `viewDidLoad` method of `ViewController.h` file, initialize the
+In `viewDidLoad` method of `ViewController.m` file, initialize the
 instance of the SDK by adding these lines. Set the view controller as
 the delegate for BlueKai SDK. All the arguments are required.
 
@@ -129,29 +129,29 @@ Define a method appCameToForeground and call `resume()`:
 }
 ```
 
-### Add Notification Support (Optional)
+### Add Callback Support (Optional)
 
 Declare the BlueKai SDK delegate in `ViewController.h`. This step is
-optional and is needed only if you need a notification when data is posted
+optional and is needed only if you need a callback when data is posted
 to BlueKai server.
 
 
 ```objective-c
-@protocol BlueKaiOnDataPostedListener;
+#import "BlueKai.h"
 
-@interface ViewController : UIViewController
-{
-} 
+@interface ViewController : UIViewController <BlueKaiOnDataPostedListener>
+
+@end
 ```
 
-Set `ViewController.h` as the delegate. You can place this code right after initializing SDK
+Set `ViewController` as the delegate. You can place this code right after initializing SDK
   
 ```objective-c
 blueKaiSdk = [[Bluekai alloc]initWithSiteId:@"2" withAppVersion:version withView:self withDevMode:NO]; 
 blueKaiSdk.delegate = (id) <BlueKaiOnDataPostedListener> self;
 ```
 
-To get notifications about the status of data posting, implement the
+To get callbacks about the status of data posting, implement the
 following delegate method in `ViewController.m`. 
 
 ```objective-c
