@@ -1,9 +1,9 @@
 ## Integrating the BlueKai SDK
 ### Download the BlueKai SDK for iOS
 
-http://bluekai.github.io/bluekai-ios-sdk-static-libs-arm64.zip (ARC-enabled with 64-bit support)
+http://bluekai.github.io/bluekai-ios-static-ARC-v2.zip (ARC-enabled with 64-bit support)
 
-http://bluekai.github.io/bluekai-ios-sdk-static-libs-arm64.zip (ARC-disabled with 64-bit support, if you need Manual Garbage Collection)
+http://bluekai.github.io/bluekai-ios-static-nonARC-v2.zip (ARC-disabled with 64-bit support, if you need Manual Garbage Collection)
 
 ### Obtain BlueKai site ID
 
