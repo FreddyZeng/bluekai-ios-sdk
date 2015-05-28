@@ -1,3 +1,11 @@
+## v2.0.0 (05.26.2015)
+-----
+Major update
+
+- Introduced a new initializer `initDirectAutoIdfaEnabledWithSiteId` that allows the host app to communicate with the tags endpoint directly without having the need to render a UIWebView. This is the recommended initialization method for host apps that require high memory efficiency. This initializer defaults to HTTPS connection. Also grabs Apple IDFA automatically. 
+- Introduced a non-ARC enabled build for the SDK that allows manual garbage collection for more control of memory management.
+- Fixed memory leaks. 
+
 ## v1.6.5 (07.16.2014)
 -----
 Minor update
