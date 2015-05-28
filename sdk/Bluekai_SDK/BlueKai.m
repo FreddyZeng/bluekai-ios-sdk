@@ -22,6 +22,9 @@ static NSString *const BLUEKAI_DATA_URL = @"http://tags.bluekai.com/";
 static NSString *const BLUEKAI_DATA_URL_SECURE = @"https://stags.bluekai.com/";
 static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consumers_privacyguidelines.php";
 
+static NSString * const USER_DATA = @"user_data.bk";
+static NSString * const ATTEMPTS = @"attempts.bk";
+
 #pragma mark - Public Methods
 
 - (id)init {
@@ -67,10 +70,9 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
         [self saveSettings:nil];
 
         
-
         // check the dictionary for previous values
         NSString *filePath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0];
-        NSString *fileName = @"user_data.bk";
+        NSString *fileName = USER_DATA;
         NSString *fileAtPath = [filePath stringByAppendingPathComponent:fileName];
 
         if (![[NSFileManager defaultManager] fileExistsAtPath:fileAtPath]) {
@@ -78,14 +80,14 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
         }
 
         NSString *atmt_filePath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0];
-        NSString *atmt_fileName = @"attempts.bk";
+        NSString *atmt_fileName = ATTEMPTS;
         NSString *atmt_fileAtPath = [atmt_filePath stringByAppendingPathComponent:atmt_fileName];
 
         if (![[NSFileManager defaultManager] fileExistsAtPath:atmt_fileAtPath]) {
             [[NSFileManager defaultManager] createFileAtPath:atmt_fileAtPath contents:nil attributes:nil];
         }
 
-        _keyValDict = [[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:@"user_data.bk"]]];
+        _keyValDict = [[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:USER_DATA]]];
 
         if ([[_keyValDict allKeys] count] > 1) {
             _numberOfRunningRequests = -1;
@@ -108,6 +110,11 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
 
 - (id)initWithSiteId:(NSString *)siteID withAppVersion:(NSString *)version withView:(UIViewController *)view withDevMode:(BOOL)devMode {
     return [self initWithSiteId:siteID withAppVersion:version withIdfa:nil withView:view withDevMode:devMode];
+}
+
+- (id)initAutoIdfaEnabledWithSiteId:(NSString *)siteID withAppVersion:(NSString *)version withView:(UIViewController *)view withDevMode:(BOOL)devMode {
+    _useHttps = YES;
+    return [self initWithSiteId:siteID withAppVersion:version withIdfa:[self identifierForAdvertising] withView:view withDevMode:devMode];
 }
 
 - (id)initDirectWithSiteId:(NSString *)siteID
@@ -145,7 +152,7 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
         
         // check the dictionary for previous values
         NSString *filePath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0];
-        NSString *fileName = @"user_data.bk";
+        NSString *fileName = USER_DATA;
         NSString *fileAtPath = [filePath stringByAppendingPathComponent:fileName];
         
         if (![[NSFileManager defaultManager] fileExistsAtPath:fileAtPath]) {
@@ -153,14 +160,14 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
         }
         
         NSString *atmt_filePath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0];
-        NSString *atmt_fileName = @"attempts.bk";
+        NSString *atmt_fileName = ATTEMPTS;
         NSString *atmt_fileAtPath = [atmt_filePath stringByAppendingPathComponent:atmt_fileName];
         
         if (![[NSFileManager defaultManager] fileExistsAtPath:atmt_fileAtPath]) {
             [[NSFileManager defaultManager] createFileAtPath:atmt_fileAtPath contents:nil attributes:nil];
         }
         
-        _keyValDict = [[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:@"user_data.bk"]]];
+        _keyValDict = [[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:USER_DATA]]];
         
         if ([[_keyValDict allKeys] count] > 1) {
             _numberOfRunningRequests = -1;
@@ -190,11 +197,7 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
 }
 
 - (id)initDirectAutoIdfaEnabledWithSiteId:(NSString *)siteID withAppVersion:(NSString *)version withDevMode:(BOOL)devMode{
-    //TO-DO Add more properties about User-Agent here
     NSString *userAgent = @"iOS BlueKaiSDK";
-    //UIWebView* webView = [[UIWebView alloc] initWithFrame: CGRectMake(0,0,0,0)];
-    //NSString* secretAgent = [webView stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
-    //[webView release];
     _useHttps = YES;
     return [self initDirectWithSiteId:siteID withAppVersion:version withIdfa:[self identifierForAdvertising] withUserAgent:userAgent withDevMode:devMode];
 }
@@ -206,7 +209,6 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
     if([[ASIdentifierManager sharedManager] isAdvertisingTrackingEnabled])
     {
         NSUUID *IDFA = [[ASIdentifierManager sharedManager] advertisingIdentifier];
-        
         return [IDFA UUIDString];
     }
     
@@ -240,7 +242,7 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
         _webUrl = [[NSMutableString alloc] init];
     }
 
-    _keyValDict = [[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:@"user_data.bk"]]];
+    _keyValDict = [[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:USER_DATA]]];
 
     if ([[_keyValDict allKeys] count] > 0) {
         _numberOfRunningRequests = -1;
@@ -471,7 +473,7 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
 - (void)writeStringToKeyValueFile:(NSString *)aString {
     // Build the path, and create if needed.
     NSString *filePath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0];
-    NSString *fileName = @"user_data.bk";
+    NSString *fileName = USER_DATA;
     NSString *fileAtPath = [filePath stringByAppendingPathComponent:fileName];
 
     if (![[NSFileManager defaultManager] fileExistsAtPath:fileAtPath]) {
@@ -512,7 +514,7 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
 - (void)writeStringToAttemptsFile:(NSString *)aString {
     // Build the path, and create if needed.
     NSString *filePath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0];
-    NSString *fileName = @"attempts.bk";
+    NSString *fileName = ATTEMPTS;
     NSString *fileAtPath = [filePath stringByAppendingPathComponent:fileName];
 
     if (![[NSFileManager defaultManager] fileExistsAtPath:fileAtPath]) {
@@ -527,9 +529,6 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
 
 - (NSString *)readStringFromFile:(NSString *) fileString {
     // Build the path...
-    //NSString *filePath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0];
-    //NSString *fileName = @"attempts.bk";
-    //NSString *fileAtPath = [filePath stringByAppendingPathComponent:fileName];
 
     #if !__has_feature(objc_arc)
     NSArray *paths = [[[NSArray alloc] initWithArray:NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)] autorelease];
@@ -597,11 +596,11 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
             if (![_remainkeyValDict valueForKey:[_keyValDict allKeys][i]]) {
                 
                 #if !__has_feature(objc_arc)
-                NSMutableDictionary *dictionary = [[[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:@"user_data.bk"]]] autorelease];
-                NSMutableDictionary *atmt_dictionary = [[[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:@"attempts.bk"]]] autorelease];
+                NSMutableDictionary *dictionary = [[[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:USER_DATA]]] autorelease];
+                NSMutableDictionary *atmt_dictionary = [[[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:ATTEMPTS]]] autorelease];
                 #else
-                NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:@"user_data.bk"]]];
-                NSMutableDictionary *atmt_dictionary = [[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:@"attempts.bk"]]];
+                NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:USER_DATA]]];
+                NSMutableDictionary *atmt_dictionary = [[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:ATTEMPTS]]];
                 #endif
                 
                 int attempts = [atmt_dictionary[[_keyValDict allKeys][i]] intValue];
@@ -663,8 +662,8 @@ static NSString *const TERMS_AND_CONDITION_URL = @"http://www.bluekai.com/consum
                 //Delete the key and value pairs from database after sent to server.
                 for (int k = 0; k < [_keyValDict count]; k++) {
                     if ([_remainkeyValDict valueForKey:[_keyValDict allKeys][k]] != NULL) {
-                        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:@"user_data.bk"]]];
-                        NSMutableDictionary *atmt_dictionary = [[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:@"attempts.bk"]]];
+                        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:USER_DATA]]];
+                        NSMutableDictionary *atmt_dictionary = [[NSMutableDictionary alloc] initWithDictionary:[self jsonStringToDictionary:[self readStringFromFile:ATTEMPTS]]];
                         int attempts = [atmt_dictionary[[_keyValDict allKeys][k]] intValue];
 
                         if (attempts != 0) {

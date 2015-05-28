@@ -87,22 +87,22 @@ blueKaiSDK = [[BlueKai alloc] initWithSiteId:@"2" withAppVersion:version withIdf
 ```
 if you would like to provide the Apple IDFA.
 
-The argument (`initWithSiteId`) is site id, which you would get from BlueKai.
+The (`initWithSiteId`) argument is the site id, which you would get from BlueKai.
 
-The argument is app version (`withAppVersion`) and is not necessarily the
+The argument (`withAppVersion`) is the app version and is not necessarily the
 application version of the calling application. This is a value by
 which BlueKai can uniquely indentify the application from which the
 request originated. A suggested approach is to use "app name-version_number" format.
 
-The argument (`withView`) is a view to which the SDK can attach an invisible WebView to call BlueKai's tag. When
+The (`withView`) argument is a view to which the SDK can attach an invisible WebView to call BlueKai's tag. When
 `devMode` is enabled, this view becomes visible to display values being passed to BlueKai's server for debugging.
 
-**[OPTIONAL]** The argument (`withIdfa`) is the Apple IDFA of the device, which provides a way of unique identification. The host app must provide this value.
+**[OPTIONAL]** The (`withIdfa`) argument is the Apple IDFA of the device, which provides a way of unique identification. The host app must provide this value.
 
 The argument (`withDevMode`) indicates whether you want developer mode. In this mode, a webview overlay will be displayed 
 with response from the BluaKai server. You should turn this feature off in your production code.
 
-#### **NEW!** 2. NSURLConnection - Direct Connection
+#### 2. NSURLConnection - Direct Connection
 If the host application does not want to initialize a UIWebView, you can use the new initializer to establish a direct connection to Bluekai. Similarly to the first approach, you can initialize the direct connection as such:
 
 ```objective-c
@@ -162,7 +162,7 @@ optional and is needed only if you need a callback when data is posted
 to BlueKai server.
 
 
-```objecidfative-c
+```objective-c
 #import "BlueKai.h"
 
 @interface ViewController : UIViewController <BlueKaiOnDataPostedListener>
@@ -236,7 +236,7 @@ Use HTTPS transfer protocol
 
 ### Methods
 
-**NEW!** Create the instance for Bluekai SDK with required arguments for direct connection (IDFA is grabbed automatically if user has not disabled it). This method is recommended for applications that require high memory efficiency. Uses NSURLConnection vs. UIWebView.
+Create the instance for Bluekai SDK with required arguments for direct connection (IDFA is grabbed automatically if user has not disabled it). This method is recommended for applications that require high memory efficiency. Uses NSURLConnection vs. UIWebView.
 
 ```objective-c
 - (id)initDirectAutoIdfaEnabledWithSiteId:(NSString *)siteID withAppVersion:(NSString *)version withDevMode:(BOOL)devMode;
@@ -250,11 +250,6 @@ Create the instance for Bluekai SDK with required arguments (with IDFA support).
 Create the instance for Bluekai SDK with required arguments (without IDFA support). This method is preferred if you do not have an Apple IDFA id.
 ```objective-c
 - (id)initWithSiteId:(NSString *)siteId withAppVersion:(NSString *)version withView:(UIViewController *)view withDevMode(BOOL)value
-```
-
-Convenience constructor to initialize and get instance of BlueKai without arguments
-```objective-c
-- (id)init
 ```
 
 Method to resume BlueKai process after calling application resumes or comes to foreground. To use in onResume() of the calling activity foreground.
@@ -300,12 +295,6 @@ Method to show BlueKai in-built opt-in or opt-out screen
 The same functionality as `showSettingsScreen` with ability to set custom background color
 ```objective-c
 - (void)showSettingsScreenWithBackgroundColor:(UIColor *)color
-```
-
-**[DEPRECATED]**
-Method to set user opt-in or opt-out preference
-```objective-c
-- (void) setPreference:(BOOL)optIn
 ```
 
 **[DEPRECATED]**

@@ -21,16 +21,14 @@ BlueKai      *blueKaiSDK;
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
-    blueKaiSDK = [[BlueKai alloc] initWithSiteId:@"19198"
-                                  withAppVersion:@"1.0"
-                                        withIdfa:@"ASHDJHJ-1231241-ASDASD"
-                                        withView:self
-                                     withDevMode:YES];
+//    blueKaiSDK = [[BlueKai alloc] initWithSiteId:@"19198" withAppVersion:@"1.0" withIdfa:@"ASHDJHJ-1231241-ASDASD" withView:self withDevMode:YES];
     
+    blueKaiSDK = [[BlueKai alloc] initAutoIdfaEnabledWithSiteId:@"19198" withAppVersion:@"1.0" withView:self withDevMode:YES];
+                  
 //    blueKaiSDK = [[BlueKai alloc] initDirectAutoIdfaEnabledWithSiteId:@"19198" withAppVersion:@"1.0" withDevMode:YES];
     
     blueKaiSDK.useHttps = NO;
-    
+        
     #if !__has_feature(objc_arc)
     [blueKaiSDK retain];
     #endif
