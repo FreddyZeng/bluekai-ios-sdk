@@ -146,19 +146,18 @@ In order to start sending data to Bluekai, the host app also needs to make sure 
 [blueKaiSDK setOptInPreference:YES];
 ```
 
-### Passing a Value 
-
-To pass a single key value pair to BlueKai SDK, use the below code
-
-    [blueKaiSdk updateWithKey:@"myKey" andValue:@"myValue"];
-  
-
 ### Passing Multiple Values
 
 To pass multiple of key value pairs to BlueKai SDK, create an NSDictionary with key/value pairs and use the below method
 
     [blueKaiSdk updateWithDictionary:@{@"myKey1":@"myValue1", @"myKey2":@"myValue2"}];
 
+### Passing a Single Value 
+
+To pass a single key value pair to BlueKai SDK, use the below code
+
+    [blueKaiSdk updateWithKey:@"myKey" andValue:@"myValue"];
+  
 ### Resuming Data Post 
 
 The `resume()` method in BlueKai SDK should be invoked from the
