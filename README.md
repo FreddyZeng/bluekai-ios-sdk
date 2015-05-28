@@ -1,9 +1,9 @@
 ## Integrating the BlueKai SDK
 ### Download the BlueKai SDK for iOS
 
-http://bluekai.github.io/bluekai-ios-sdk-static-libs.zip
+http://bluekai.github.io/bluekai-ios-static-ARC-v2.zip (ARC-enabled with 64-bit support)
 
-http://bluekai.github.io/bluekai-ios-sdk-static-libs-arm64.zip (64-bit)
+http://bluekai.github.io/bluekai-ios-static-nonARC-v2.zip (ARC-disabled with 64-bit support, if you need Manual Garbage Collection)
 
 ### Obtain BlueKai site ID
 
@@ -13,9 +13,9 @@ But before you ship, be sure to contact your BlueKai account manager for your co
 
 ### Add BlueKai SDK to Project
 
-In XCode, drag the BlueKai_SDK folder into the project directory as shown. 
+In XCode, drag the "BlueKai_SDK Library" folder into the project directory as shown. 
 
-   ![Screenshot](http://bluekai.github.io/images/ios/image001.png)
+   ![Screenshot](http://bluekai.github.io/images/ios/DragNDrop.png)
 
 When you do so you will get a prompt like the one below. Choose the
 option shown in the screen. This is a suggested mechanism and you can
@@ -25,24 +25,26 @@ choose the option that fits your environment.
 
 ### Add Dependencies 
 
-Add `libsqlite3.0.dylib`, `SystemConfiguration.framework` to your
-project. To do so, please follow these steps.
+Add `AdSupport.framework`, `SystemConfiguration.framework` to your
+project. To do so, please follow these steps. 
 
-+ Select "Targets" from your project
+**NOTICE** `AdSupport.framework` is only required if you need to support Apple IDFA.
 
-    ![Screenshot](http://bluekai.github.io/images/ios/image005.png)
++ Go to your project properties
+
+    ![Screenshot](http://bluekai.github.io/images/ios/Libraries.png)
 + Select "Build Phases"
 + Click on "+" symbol in "Link Binary With Libraries" panel
-+ Type "libsqli" in the search box
-+ Select "`libsqlite3.dylib`" from the list
++ Type "AdSupp" in the search box
++ Select "`AdSupport.framework`" from the list
 + Click on the "Add" button
     
-    ![Screenshot](http://bluekai.github.io/images/ios/image007.png)
-+ Repeat this process to add SystemConfiguration.framework. Type "system" in the search box
+    ![Screenshot](http://bluekai.github.io/images/ios/AdSupport.png)
++ Repeat this process to add SystemConfiguration.framework. Type "System" in the search box
 + Select "SystemConfiguration.framework" from the list
 + Click on the "Add" button
-
-    ![Screenshot](http://bluekai.github.io/images/ios/image009.png)
+    
+    ![Screenshot](http://bluekai.github.io/images/ios/SystemConfig.png)
 
 ### Include BlueKai iOS SDK 
 
@@ -71,43 +73,91 @@ In `ViewController.h` file, define an instance of BlueKai SDK.
 
 ### Initialize SDK 
 
-In `viewDidLoad` method of `ViewController.h` file, initialize the
+With the introduction of v2.0.0, there are now two main ways to initialize the SDK:
+
+#### 1. Using UIWebView - RECOMMENDED
+In `viewDidLoad` method of `ViewController.m` file, initialize the
 instance of the SDK by adding these lines. Set the view controller as
 the delegate for BlueKai SDK. All the arguments are required.
 
-  
 ```objective-c
-blueKaiSdk = [[BlueKai alloc] initWithSiteId:@"2" withAppVersion:version withView:self withDevMode:YES]; 
+blueKaiSDK = [[BlueKai alloc] initAutoIdfaEnabledWithSiteId:@"2" withAppVersion:@"1.0" withView:self withDevMode:YES];
+
 ```
+or 
+```objective-c
+blueKaiSDK = [[BlueKai alloc] initWithSiteId:@"2" withAppVersion:version withIdfa:idfa withView:self withDevMode:YES];
+```
+if you would like to provide the Apple IDFA.
 
-The first argument (`initWithSiteId`) is site id, which you would get from BlueKai.
+The (`initWithSiteId`) argument is the site id, which you would get from BlueKai.
 
-The second argument is app version (`withAppVersion`) and is not necessarily the
+The argument (`withAppVersion`) is the app version and is not necessarily the
 application version of the calling application. This is a value by
 which BlueKai can uniquely indentify the application from which the
 request originated. A suggested approach is to use "app name-version_number" format.
 
-The third argument (`withView`) is a view to which the SDK can attach an invisible WebView to call BlueKai's tag. When
+The (`withView`) argument is a view to which the SDK can attach an invisible WebView to call BlueKai's tag. When
 `devMode` is enabled, this view becomes visible to display values being passed to BlueKai's server for debugging.
 
-The last argument (`withDevMode`) indicates whether you want developer mode. In this mode, a webview overlay will be displayed 
+The (`withIdfa`) argument is the Apple IDFA of the device, which provides a way of unique identification. The host app must provide this value. If you would like the mobile SDK to obtain the IDFA automatically, we recommend using the initAutoIdfaEnabledWithSiteId initializer.
+
+The argument (`withDevMode`) indicates whether you want developer mode. In this mode, a webview overlay will be displayed 
 with response from the BluaKai server. You should turn this feature off in your production code.
 
+#### 2. Using NSURLConnection (no UIWebView) - ALTERNATIVE BUT NOT RECOMMENDED
+If the host application does not want to initialize a UIWebView, you can use this new initializer to establish a direct connection to Bluekai. Similar to the first approach, you can initialize the direct connection as such:
 
+```objective-c
+blueKaiSDK = [[BlueKai alloc] initDirectAutoIdfaEnabledWithSiteId:@"2" withAppVersion:@"1.0" withDevMode:YES];
+```
 
-### Passing a Value 
+or 
+```objective-c
+blueKaiSDK = [[BlueKai alloc] initDirectWithSiteId:@"2" withAppVersion:version withIdfa:idfa withDevMode:YES];
+```
+if you would like to provide the Apple IDFA.
 
-To pass a single key value pair to BlueKai SDK, use the below code
+For both methods, the host app can get the IDFA by calling:
 
-    [blueKaiSdk updateWithKey:@"myKey" andValue:@"myValue"];
-  
+```objective-c
+- (NSString *)identifierForAdvertising
+{
+    if([[ASIdentifierManager sharedManager] isAdvertisingTrackingEnabled])
+    {
+        NSUUID *IDFA = [[ASIdentifierManager sharedManager] advertisingIdentifier];
+        return [IDFA UUIDString];
+    }
+    
+    return nil;
+}
+```
+
+The connection is HTTPS by default for the AutoIdfaEnabled varities of the initializers, but can be changed to HTTP by calling:
+
+```objective-c
+[blueKaiSDK setUseHttps:NO];
+```
+
+**IMPORTANT**
+In order to start sending data to Bluekai, the host app also needs to make sure the opt-in preference is set to `YES`:
+
+```objective-c
+[blueKaiSDK setOptInPreference:YES];
+```
 
 ### Passing Multiple Values
 
 To pass multiple of key value pairs to BlueKai SDK, create an NSDictionary with key/value pairs and use the below method
 
-    [blueKaiSdk updateWithDictionary:dictionary];
+    [blueKaiSdk updateWithDictionary:@{@"myKey1":@"myValue1", @"myKey2":@"myValue2"}];
 
+### Passing a Single Value 
+
+To pass a single key value pair to BlueKai SDK, use the below code
+
+    [blueKaiSdk updateWithKey:@"myKey" andValue:@"myValue"];
+  
 ### Resuming Data Post 
 
 The `resume()` method in BlueKai SDK should be invoked from the
@@ -129,29 +179,29 @@ Define a method appCameToForeground and call `resume()`:
 }
 ```
 
-### Add Notification Support (Optional)
+### Add Callback Support (Optional)
 
 Declare the BlueKai SDK delegate in `ViewController.h`. This step is
-optional and is needed only if you need a notification when data is posted
+optional and is needed only if you need a callback when data is posted
 to BlueKai server.
 
 
 ```objective-c
-@protocol BlueKaiOnDataPostedListener;
+#import "BlueKai.h"
 
-@interface ViewController : UIViewController
-{
-} 
+@interface ViewController : UIViewController <BlueKaiOnDataPostedListener>
+
+@end
 ```
 
-Set `ViewController.h` as the delegate. You can place this code right after initializing SDK
+Set `ViewController` as the delegate. You can place this code right after initializing SDK
   
 ```objective-c
 blueKaiSdk = [[Bluekai alloc]initWithSiteId:@"2" withAppVersion:version withView:self withDevMode:NO]; 
 blueKaiSdk.delegate = (id) <BlueKaiOnDataPostedListener> self;
 ```
 
-To get notifications about the status of data posting, implement the
+To get callbacks about the status of data posting, implement the
 following delegate method in `ViewController.m`. 
 
 ```objective-c
@@ -210,25 +260,57 @@ Use HTTPS transfer protocol
 
 ### Methods
 
-Create the instance for Bluekai SDK with required arguments (with IDFA support).
+**RECOMMENDED** Create the instance for Bluekai SDK with required arguments (IDFA is grabbed automatically if user has not disabled it).
+```objective-c
+- (id)initAutoIdfaEnabledWithSiteId:(NSString *)siteID withAppVersion:(NSString *)version withView:(UIViewController *)view withDevMode:(BOOL)devMode;
+```
+
+Create the instance for Bluekai SDK with required arguments (provide IDFA manually).
 ```objective-c
 - (id)initWithSiteId:(NSString *)siteId withAppVersion:(NSString *)version withIdfa:(NSString *)idfa withView:(UIViewController *)view withDevMode(BOOL)value
 ```
 
-Create the instance for Bluekai SDK with required arguments (without IDFA support). This method is preferred if you do not have an Appple IDFA id.
+**ALTERNATIVE BUT NOT RECOMMENDED** Create the instance for Bluekai SDK with required arguments for direct connection (IDFA is grabbed automatically if user has not disabled it). Uses NSURLConnection vs. UIWebView.
 ```objective-c
-- (id)initWithSiteId:(NSString *)siteId withAppVersion:(NSString *)version withView:(UIViewController *)view withDevMode(BOOL)value
+- (id)initDirectAutoIdfaEnabledWithSiteId:(NSString *)siteID withAppVersion:(NSString *)version withDevMode:(BOOL)devMode;
 ```
+
+Create the instance for Bluekai SDK with required arguments for direct connection (provide IDFA manually).
+```objective-c
+- (id)initDirectWithSiteId:(NSString *)siteID withAppVersion:(NSString *)version withIdfa:(NSString *)idfa withDevMode:(BOOL)devMode;
+```
+
+Method to resume BlueKai process after calling application resumes or comes to foreground. To use in onResume() of the calling activity foreground.
+```objective-c
+- (void)resume
+```
+
+Method to set user opt-in or opt-out preference
+```objective-c
+- (void) setOptInPreference:(BOOL)OptIn
+```
+
+Set key/value strings in a NSDictionary and send them to BlueKai server
+```objective-c
+- (void)updateWithDictionary:(NSDictionary *)dictionary
+```
+
+Set key/value strings and send them to BlueKai server
+```objective-c
+- (void)updateWithKey:(NSString *)key andValue:(NSString *)value
+```
+
+Allows your app to receive a callback from the BlueKai SDK when data has been posted to servers
+```objective-c
+- (void)onDataPosted:(BOOL)status;
+```
+
+### Deprecated Methods
 
 **[DEPRECATED]**
 Init a BlueKai object
 ```objective-c
 - (id)initWithArgs:(BOOL)value withSiteId:(NSString *)siteID withAppVersion:(NSString *)version withView:(UIViewController *)view
-```
-
-Convenience constructor to initialize and get instance of BlueKai without arguments
-```objective-c
-- (id)init
 ```
 
 **[DEPRECATED]**
@@ -243,47 +325,16 @@ The same functionality as `showSettingsScreen` with ability to set custom backgr
 - (void)showSettingsScreenWithBackgroundColor:(UIColor *)color
 ```
 
-Method to resume BlueKai process after calling application resumes or comes to foreground. To use in onResume() of the calling activity foreground.
-```objective-c
-- (void)resume
-```
-
-Method to set user opt-in or opt-out preference
-```objective-c
-- (void) setOptInPreference:(BOOL)OptIn
-```
-
-**[DEPRECATED]**
-Method to set user opt-in or opt-out preference
-```objective-c
-- (void) setPreference:(BOOL)optIn
-```
-
-Set key/value strings and send them to BlueKai server
-```objective-c
-- (void)updateWithKey:(NSString *)key andValue:(NSString *)value
-```
-
 **[DEPRECATED]**
 Set key/value strings and send them to BlueKai server
 ```objective-c
 - (void)put:(NSString *)key withValue:(NSString *)value
 ```
 
-Set key/value strings in a NSDictionary and send them to BlueKai server
-```objective-c
-- (void)updateWithDictionary:(NSDictionary *)dictionary
-```
-
 **[DEPRECATED]**
 Set key/value strings in a NSDictionary and send them to BlueKai server
 ```objective-c
 - (void)put:(NSDictionary *)dictionary
-```
-
-Allows your app to receive a callback from the BlueKai SDK when data has been posted to servers
-```objective-c
-- (void)onDataPosted:(BOOL)status;
 ```
 
 ## Updating the SDK 

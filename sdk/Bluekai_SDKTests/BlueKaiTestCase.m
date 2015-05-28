@@ -18,11 +18,10 @@
 @interface BlueKai ()
 // Testable private methods
 - (void)writeStringToKeyValueFile:(NSString *)aString;
-- (NSString *)readStringFromKeyValueFile;
 - (NSString *)getKeyValueJSON:(NSMutableDictionary *)keyValues;
 - (NSDictionary *)getKeyValueDictionary:(NSString *)jsonString;
 - (void)writeStringToAttemptsFile:(NSString *)aString;
-- (NSString *)readStringFromAttemptsFile;
+- (NSString *)readStringFromFile:(NSString *)fileString;
 - (NSString *)getAttemptsJSON:(NSMutableDictionary *)keyValues;
 - (NSDictionary *)getAttemptsDictionary:(NSString *)jsonString;
 - (void)saveOptInPrefsOnServer;
@@ -56,6 +55,9 @@
 @end
 
 @implementation BlueKaiTestCase
+
+static NSString * const USER_DATA = @"user_data.bk";
+static NSString * const ATTEMPTS = @"attempts.bk";
 
 - (void)setUp
 {
@@ -213,7 +215,7 @@
 
     // get data
     NSString *filePath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0];
-    NSString *fileName = @"user_data.bk";
+    NSString *fileName = USER_DATA;
     NSString *fileAtPath = [filePath stringByAppendingPathComponent:fileName];
     NSString *data = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:fileAtPath] encoding:NSUTF8StringEncoding];
 
@@ -224,11 +226,11 @@
 {
     // set data
     NSString *filePath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0];
-    NSString *fileName = @"user_data.bk";
+    NSString *fileName = USER_DATA;
     NSString *fileAtPath = [filePath stringByAppendingPathComponent:fileName];
     [[expected dataUsingEncoding:NSUTF8StringEncoding] writeToFile:fileAtPath atomically:NO];
 
-    XCTAssertEqualObjects(expected, [blueKaiSdk readStringFromKeyValueFile], @"Data read from file differ from expected string");
+    XCTAssertEqualObjects(expected, [blueKaiSdk readStringFromFile:USER_DATA], @"Data read from file differ from expected string");
 }
 
 - (void)testCanGetKeyValueJSON
@@ -250,7 +252,7 @@
 
     // read data
     NSString *filePath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0];
-    NSString *fileName = @"attempts.bk";
+    NSString *fileName = ATTEMPTS;
     NSString *fileAtPath = [filePath stringByAppendingPathComponent:fileName];
 
     XCTAssertEqualObjects(attemptsString, [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:fileAtPath] encoding:NSUTF8StringEncoding], @"Attempts strings don't match");
@@ -261,12 +263,12 @@
     // set data
     NSString *attemptsString = @"{\"myKey1\":\"1\",\"myKey2\":\"1\"}";
     NSString *filePath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0];
-    NSString *fileName = @"attempts.bk";
+    NSString *fileName = ATTEMPTS;
     NSString *fileAtPath = [filePath stringByAppendingPathComponent:fileName];
     [[NSFileManager defaultManager] createFileAtPath:fileAtPath contents:nil attributes:nil];
     [[attemptsString dataUsingEncoding:NSUTF8StringEncoding] writeToFile:fileAtPath atomically:NO];
 
-    XCTAssertEqualObjects(attemptsString, [blueKaiSdk readStringFromAttemptsFile], @"Attempts strings don't match");
+    XCTAssertEqualObjects(attemptsString, [blueKaiSdk readStringFromFile:ATTEMPTS], @"Attempts strings don't match");
 }
 
 - (void)testGetAttemptsJSON
@@ -294,7 +296,7 @@
 - (void)testUrlEncode
 {
     NSString *encodedOutput = [blueKaiSdk urlEncode:@" `~!@#$%^&*()_+-={}[]|\\:;\"'<,>.?/AZaz"];
-    NSString *expectedOutput = @"+%60~%21%40%23%24%25%5E%26%2A%28%29_%2B-%3D%7B%7D%5B%5D%7C%5C%3A%3B%22%27%3C%2C%3E.%3F%2FAZaz";
+    NSString *expectedOutput = @"%20%60~%21%40%23%24%25%5E%26%2A%28%29_%2B-%3D%7B%7D%5B%5D%7C%5C%3A%3B%22%27%3C%2C%3E.%3F%2FAZaz";
     XCTAssertTrue([expectedOutput isEqualToString:encodedOutput], @"Encoded strings do not match");
 }
 

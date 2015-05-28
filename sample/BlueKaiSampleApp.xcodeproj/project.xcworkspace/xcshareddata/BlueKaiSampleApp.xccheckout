@@ -10,31 +10,31 @@
 	<string>BlueKaiSampleApp</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>AEFA6478-54E1-4FE1-BB3A-911442054AE1</key>
-		<string>ssh://github.com/BlueKai/bluekai-ios-sdk.git</string>
+		<key>CA4AC5F629E6FDEDF1C60AD4967190C8B0F4B001</key>
+		<string>https://github.com/BlueKai/bluekai-ios-sdk.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>sample/BlueKaiSampleApp.xcodeproj/project.xcworkspace</string>
+	<string>sample/BlueKaiSampleApp.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>AEFA6478-54E1-4FE1-BB3A-911442054AE1</key>
+		<key>CA4AC5F629E6FDEDF1C60AD4967190C8B0F4B001</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>ssh://github.com/BlueKai/bluekai-ios-sdk.git</string>
+	<string>https://github.com/BlueKai/bluekai-ios-sdk.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>AEFA6478-54E1-4FE1-BB3A-911442054AE1</string>
+	<string>CA4AC5F629E6FDEDF1C60AD4967190C8B0F4B001</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>AEFA6478-54E1-4FE1-BB3A-911442054AE1</string>
+			<string>CA4AC5F629E6FDEDF1C60AD4967190C8B0F4B001</string>
 			<key>IDESourceControlWCCName</key>
-			<string>bluekai-ios-sdk</string>
+			<string>ios-direct</string>
 		</dict>
 	</array>
 </dict>
