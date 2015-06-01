@@ -106,7 +106,7 @@ The argument (`withDevMode`) indicates whether you want developer mode. In this 
 with response from the BluaKai server. You should turn this feature off in your production code.
 
 #### 2. Using NSURLConnection (no UIWebView) - ALTERNATIVE BUT NOT RECOMMENDED
-If the host application does not want to initialize a UIWebView, you can use this new initializer to establish a direct connection to Bluekai. Similar to the first approach, you can initialize the direct connection as such:
+If the host application does not want to initialize a UIWebView, you can use this new initializer to establish a direct connection to Bluekai. Please contact your account manager if you would like to use this method. Similar to the first approach, you can initialize the direct connection as such:
 
 ```objective-c
 blueKaiSDK = [[BlueKai alloc] initDirectAutoIdfaEnabledWithSiteId:@"2" withAppVersion:@"1.0" withDevMode:YES];
@@ -144,6 +144,12 @@ In order to start sending data to Bluekai, the host app also needs to make sure 
 
 ```objective-c
 [blueKaiSDK setOptInPreference:YES];
+```
+
+To stop sending data to BlueKai:
+
+```objective-c
+[blueKaiSDK setOptInPreference:NO];
 ```
 
 ### Passing Multiple Values
