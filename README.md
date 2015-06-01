@@ -218,6 +218,9 @@ following delegate method in `ViewController.m`.
 }
 ```
 
+On posting the data succesfully `status` will be `YES`. If failed, it will be `NO`.
+
+
 ### Send displayName by Default (Recommended)
 
 It's recommended that the display name of the application be sent in
