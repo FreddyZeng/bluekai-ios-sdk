@@ -127,7 +127,13 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReach
 
 	if (reachability != NULL)
 	{
-		returnValue = [[self alloc] init];
+
+    #if !__has_feature(objc_arc)
+        returnValue = [[[self alloc] init] autorelease];
+    #else
+        returnValue = [[self alloc] init];
+    #endif
+        
 		if (returnValue != NULL)
 		{
 			returnValue->_reachabilityRef = reachability;
@@ -197,16 +203,15 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReach
 	}
 }
 
-
-//- (void)dealloc
-//{
-//	[self stopNotifier];
-//	if (_reachabilityRef != NULL)
-//	{
-//		CFRelease(_reachabilityRef);
-//	}
-//}
-
+- (void)dealloc
+{
+    [self stopNotifier];
+    if (_reachabilityRef != NULL)
+    {
+        CFRelease(_reachabilityRef);
+    }
+    [super dealloc];
+}
 
 #pragma mark - Network Flag Handling
 

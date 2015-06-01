@@ -21,13 +21,21 @@
 - (void)onDataPosted:(BOOL)status;
 @end
 
-@interface BlueKai : NSObject <UIWebViewDelegate, UIGestureRecognizerDelegate, NSURLConnectionDelegate> {
+@interface BlueKai : NSObject <UIWebViewDelegate, UIGestureRecognizerDelegate, NSURLConnectionDelegate, NSURLConnectionDataDelegate> {
 }
 
 /** Sets a delegate for callbacks from the BlueKai SDK
 * Works in conjunction with the `onDataPosted` method
 */
+<<<<<<< HEAD
 @property (nonatomic, weak) id <BlueKaiOnDataPostedListener> delegate;
+=======
+#if !__has_feature(objc_arc)
+@property (nonatomic) id <BlueKaiOnDataPostedListener> delegate;
+#else
+@property (nonatomic,weak) id <BlueKaiOnDataPostedListener> delegate;
+#endif
+>>>>>>> 22033bb72ec52b1dff09869dd8be1e951c6099d6
 
 /** Sets iOS app version
 *
@@ -60,6 +68,15 @@
 */
 @property (nonatomic) NSString *siteId;
 
+<<<<<<< HEAD
+=======
+/** Sets User Agent string used for request to BlueKai
+ *
+ * @param userAgent, this is a default user agent that can be obtained from UIWebView or Mobile browser
+ */
+@property (nonatomic) NSString *userAgent;
+
+>>>>>>> 22033bb72ec52b1dff09869dd8be1e951c6099d6
 /** Sets HTTPS transfer protocol
 *
 * @param BOOL, sets HTTPS; defaults to "NO"
@@ -71,6 +88,15 @@
 * @param ViewController, set the ViewController instance as view to get notification on the data posting status
 */
 @property (nonatomic) UIViewController *viewController;
+<<<<<<< HEAD
+=======
+
+/** Sets a preference towards direct HTTP calls vs Web View
+ *
+ * @param useDirectHTTPCalls
+ */
+@property (nonatomic) BOOL useDirectHTTPCalls;
+>>>>>>> 22033bb72ec52b1dff09869dd8be1e951c6099d6
 
 /** Init BlueKai SDK
 *
@@ -82,6 +108,8 @@
 * @param devMode, BOOL value to toggle on/off verbose logging; defaults to "NO"; optional
 */
 - (id)initWithSiteId:(NSString *)siteID
+<<<<<<< HEAD
+=======
       withAppVersion:(NSString *)version
             withView:(UIViewController *)view
          withDevMode:(BOOL)devMode;
@@ -112,6 +140,77 @@
     withAppVersion:(NSString *)version
           withView:(UIViewController *)view;
 
+/** Init BlueKai with IDFA and no web view
+ *
+ * Create the instance for BlueKai SDK with required arguments and IDFA
+ *
+ * @param siteId, contact your BlueKai rep for this id; required
+ * @param appVersion, version of your iOS application; required
+ * @param idfa, IDFA (identifier for advertising) advertiser id from Apple, required
+ * @param devMode, BOOL value to toggle on/off verbose logging; defaults to "NO"; optional
+ */
+- (id)initDirectWithSiteId:(NSString *)siteID
+>>>>>>> 22033bb72ec52b1dff09869dd8be1e951c6099d6
+      withAppVersion:(NSString *)version
+            withIdfa:(NSString *)idfa
+         withDevMode:(BOOL)devMode;
+
+<<<<<<< HEAD
+/** Init BlueKai SDK with IDFA
+*
+* Create the instance for BlueKai SDK with required arguments and IDFA
+*
+* @param siteId, contact your BlueKai rep for this id; required
+* @param appVersion, version of your iOS application; required
+* @param idfa, IDFA (identifier for advertising) advertiser id from Apple, required
+* @param viewController, a view for the SDK to attach itself to for an invisible webView to call BlueKai tags with; required
+* @param devMode, BOOL value to toggle on/off verbose logging; defaults to "NO"; optional
+*/
+- (id)initWithSiteId:(NSString *)siteID
+=======
+/** Init BlueKai with IDFA and no web view
+ *
+ * Create the instance for BlueKai SDK with required arguments and IDFA
+ *
+ * @param siteId, contact your BlueKai rep for this id; required
+ * @param appVersion, version of your iOS application; required
+ * @param idfa, IDFA (identifier for advertising) advertiser id from Apple, required
+ * @param userAgent, browser user agent string (default user agent from Safari or UIWebView), optional
+ * @param devMode, BOOL value to toggle on/off verbose logging; defaults to "NO"; optional
+ */
+- (id)initDirectWithSiteId:(NSString *)siteID
+>>>>>>> 22033bb72ec52b1dff09869dd8be1e951c6099d6
+      withAppVersion:(NSString *)version
+            withIdfa:(NSString *)idfa
+            withUserAgent:(NSString *)userAgent
+         withDevMode:(BOOL)devMode;
+
+<<<<<<< HEAD
+/** Init BlueKai SDK (Deprecated)
+*
+* Deprecated; Use "initWithSiteId" instead
+*
+*/
+- (id)initWithArgs:(BOOL)value
+        withSiteId:(NSString *)siteID
+    withAppVersion:(NSString *)version
+          withView:(UIViewController *)view;
+=======
+/** Init BlueKai SDK with Automatically Getting IDFA from the device
+ *
+ * Create the instance for BlueKai SDK with required arguments and automatically grab the IDFA if
+ * ad tracking is enabled on the device. IDFA is set to nil internally if ad tracking is disabled.
+ *
+ * @param siteId, contact your BlueKai rep for this id; required
+ * @param appVersion, version of your iOS application; required
+ * @param userAgent, browser user agent string (default user agent from Safari or UIWebView), optional
+ * @param devMode, BOOL value to toggle on/off verbose logging; defaults to "NO"; optional
+ */
+- (id)initDirectAutoIdfaEnabledWithSiteId:(NSString *)siteID
+            withAppVersion:(NSString *)version
+               withDevMode:(BOOL)devMode;
+>>>>>>> 22033bb72ec52b1dff09869dd8be1e951c6099d6
+
 /** Sets URL params as a key/value pair
 *
 * @param key, URL param key; required
@@ -129,6 +228,8 @@
 */
 - (void)put:(NSString *)key
   withValue:(NSString *)value;
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data;
 
 /** Sets URL params by using NSDictionary
 *
