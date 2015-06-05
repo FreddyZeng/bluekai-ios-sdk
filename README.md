@@ -90,7 +90,7 @@ blueKaiSDK = [[BlueKai alloc] initWithSiteId:@"2" withAppVersion:version withIdf
 ```
 if you would like to provide the Apple IDFA.
 
-The (`initWithSiteId`) argument is the site id, which you would get from BlueKai.
+The (`initWithSiteId`) argument is the site id, which you would get from BlueKai. For any demo projects a site id of 2 can be used.
 
 The argument (`withAppVersion`) is the app version and is not necessarily the
 application version of the calling application. This is a value by
