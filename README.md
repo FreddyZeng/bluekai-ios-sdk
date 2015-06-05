@@ -100,7 +100,7 @@ request originated. A suggested approach is to use "app name-version_number" for
 The (`withView`) argument is a view to which the SDK can attach an invisible WebView to call BlueKai's tag. When
 `devMode` is enabled, this view becomes visible to display values being passed to BlueKai's server for debugging.
 
-The (`withIdfa`) argument is the Apple IDFA of the device, which provides a way of unique identification. The host app must provide this value. If you would like the mobile SDK to obtain the IDFA automatically, we recommend using the initAutoIdfaEnabledWithSiteId initializer.
+The (`withIdfa`) argument is the Apple IDFA of the device, which provides a way of unique identification. The host app must provide this value. If you would like the mobile SDK to obtain the IDFA automatically, we recommend using the initAutoIdfaEnabledWithSiteId initializer. When the idfa is grabbed automatically, we make sure to check if the user has disabled ad tracking, and if it is disabled we will not be able to grab the idfa. 
 
 The argument (`withDevMode`) indicates whether you want developer mode. In this mode, a webview overlay will be displayed 
 with response from the BluaKai server. You should turn this feature off in your production code.
