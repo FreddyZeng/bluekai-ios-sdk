@@ -27,7 +27,7 @@ BlueKai      *blueKaiSDK;
                   
 //    blueKaiSDK = [[BlueKai alloc] initDirectAutoIdfaEnabledWithSiteId:@"19198" withAppVersion:@"1.0" withDevMode:YES];
     
-    blueKaiSDK.useHttps = NO;
+    blueKaiSDK.useHttps = YES;
         
     #if !__has_feature(objc_arc)
     [blueKaiSDK retain];
