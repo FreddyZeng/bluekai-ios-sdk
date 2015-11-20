@@ -1,3 +1,12 @@
+## v2.0.1 (11.20.2015)
+-----
+Minor update
+
+- Fixed namespacing of the Reachibility library which could potentially conflict with the host app's namespacing.
+- Changed README to include instructions for ATS compatibility.
+
+-----
+
 ## v2.0.0 (05.26.2015)
 -----
 Major update
