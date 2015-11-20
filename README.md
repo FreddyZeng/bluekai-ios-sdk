@@ -9,7 +9,8 @@
 For iOS 9 ATS compatibility, if you would like to send only HTTPS requests, please set `[blueKaiSDK setUseHttps:YES];` 
 
 After that you will have to add exceptions to your Info.plist file as follows as we do not yet support Forward Secrecy:
-```
+
+```xml
 <key>NSAppTransportSecurity</key>
     <dict>
         <key>NSExceptionDomains</key>
