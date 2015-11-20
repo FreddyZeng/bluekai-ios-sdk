@@ -1,9 +1,9 @@
 ## Integrating the BlueKai SDK
 ### Download the BlueKai SDK for iOS
 
-http://bluekai.github.io/bluekai-ios-static-ARC-v2.zip (ARC-enabled with 64-bit support)
+[ARC-enabled with 64-bit support] (lib/bluekai-ios-static-ARC-v2.0.1.zip) 
 
-http://bluekai.github.io/bluekai-ios-static-nonARC-v2.zip (ARC-disabled with 64-bit support, if you need Manual Garbage Collection)
+[ARC-disabled with 64-bit support, if you need Manual Garbage Collection] (lib/bluekai-ios-static-nonARC-v2.0.1.zip)
 
 ### Obtain BlueKai site ID
 
@@ -21,7 +21,7 @@ When you do so you will get a prompt like the one below. Choose the
 option shown in the screen. This is a suggested mechanism and you can
 choose the option that fits your environment.
 
-   ![Screenshot](http://bluekai.github.io/images/ios/image003.png)
+   ![Screenshot](images/image003.png)
 
 ### Add Dependencies 
 
@@ -32,19 +32,19 @@ project. To do so, please follow these steps.
 
 + Go to your project properties
 
-    ![Screenshot](http://bluekai.github.io/images/ios/Libraries.png)
+    ![Screenshot](images/Libraries.png)
 + Select "Build Phases"
 + Click on "+" symbol in "Link Binary With Libraries" panel
 + Type "AdSupp" in the search box
 + Select "`AdSupport.framework`" from the list
 + Click on the "Add" button
     
-    ![Screenshot](http://bluekai.github.io/images/ios/AdSupport.png)
+    ![Screenshot](images/AdSupport.png)
 + Repeat this process to add SystemConfiguration.framework. Type "System" in the search box
 + Select "SystemConfiguration.framework" from the list
 + Click on the "Add" button
     
-    ![Screenshot](http://bluekai.github.io/images/ios/SystemConfig.png)
+    ![Screenshot](images/SystemConfig.png)
 
 ### Include BlueKai iOS SDK 
 
