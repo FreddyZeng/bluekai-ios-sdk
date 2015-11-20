@@ -8,7 +8,7 @@
 ### iOS 9+ ATS Compatibility
 For iOS 9 ATS compatibility, if you would like to send only HTTPS requests, please set `[blueKaiSDK setUseHttps:YES];` 
 
-After that you will have to add exceptions to your Info.plist file as follows as we do not yet support Forward Secrecy:
+After that, you will have to add exceptions to your Info.plist file, as follows as we do not yet support Forward Secrecy:
 
 ```xml
 <key>NSAppTransportSecurity</key>
@@ -33,6 +33,33 @@ After that you will have to add exceptions to your Info.plist file as follows as
     </dict>
 ```
 
+If you still would like to use HTTP requests despite the ATS requirements, you can create exceptions to allow HTTP requests as follows:
+```xml
+<key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSExceptionDomains</key>
+        <dict>
+            <key>bluekai.com</key>
+            <dict>
+                <key>NSExceptionRequiresForwardSecrecy</key>
+                <false/>
+                <key>NSIncludesSubdomains</key>
+                <true/>
+                <key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+                <true/>
+            </dict>
+            <key>bkrtx.com</key>
+            <dict>
+                <key>NSExceptionRequiresForwardSecrecy</key>
+                <false/>
+                <key>NSIncludesSubdomains</key>
+                <true/>
+                <key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+                <true/>
+            </dict>
+        </dict>
+    </dict>
+```
 
 ### Obtain BlueKai site ID
 
