@@ -15,7 +15,7 @@ But before you ship, be sure to contact your BlueKai account manager for your co
 
 In XCode, drag the "BlueKai_SDK Library" folder into the project directory as shown. 
 
-   ![Screenshot](http://bluekai.github.io/images/ios/DragNDrop.png)
+   ![Screenshot](images/DragNDrop.png)
 
 When you do so you will get a prompt like the one below. Choose the
 option shown in the screen. This is a suggested mechanism and you can
