@@ -32,8 +32,8 @@
 		24FDF098192560A7004755CD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D71EF5EC173B6CF200B90918 /* UIKit.framework */; };
 		D71EF5ED173B6CF200B90918 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D71EF5EC173B6CF200B90918 /* UIKit.framework */; };
 		D79AF75B173A1AA7002E0A0B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D79AF75A173A1AA7002E0A0B /* Foundation.framework */; };
-		D79AF760173A1AA7002E0A0B /* BlueKai.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D79AF75F173A1AA7002E0A0B /* BlueKai.h */; };
-		D79AF762173A1AA7002E0A0B /* BlueKai.m in Sources */ = {isa = PBXBuildFile; fileRef = D79AF761173A1AA7002E0A0B /* BlueKai.m */; };
+		D79AF760173A1AA7002E0A0B /* BlueKai.h in Copy Files */ = {isa = PBXBuildFile; fileRef = D79AF75F173A1AA7002E0A0B /* BlueKai.h */; };
+		D79AF762173A1AA7002E0A0B /* BlueKai.m in Sources */ = {isa = PBXBuildFile; fileRef = D79AF761173A1AA7002E0A0B /* BlueKai.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		D79AF76D173A1AA8002E0A0B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D79AF75A173A1AA7002E0A0B /* Foundation.framework */; };
 		D79AF776173A1AA8002E0A0B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D79AF774173A1AA8002E0A0B /* InfoPlist.strings */; };
 		D79AF792173A2151002E0A0B /* BlueKai_Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DBA08CD86370BA5E8CBD11 /* BlueKai_Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -57,14 +57,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		D79AF755173A1AA7002E0A0B /* CopyFiles */ = {
+		D79AF755173A1AA7002E0A0B /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				D79AF760173A1AA7002E0A0B /* BlueKai.h in CopyFiles */,
+				D79AF760173A1AA7002E0A0B /* BlueKai.h in Copy Files */,
 			);
+			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -274,7 +275,7 @@
 			buildPhases = (
 				D79AF753173A1AA7002E0A0B /* Sources */,
 				D79AF754173A1AA7002E0A0B /* Frameworks */,
-				D79AF755173A1AA7002E0A0B /* CopyFiles */,
+				D79AF755173A1AA7002E0A0B /* Copy Files */,
 				24A22516191C223200FB912A /* ShellScript */,
 			);
 			buildRules = (
