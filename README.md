@@ -5,6 +5,34 @@
 
 [ARC-disabled with 64-bit support, if you need Manual Garbage Collection] (https://github.com/BlueKai/bluekai-ios-sdk/raw/master/lib/bluekai-ios-static-nonARC-v2.0.1.zip)
 
+### iOS 9+ ATS Compatibility
+For iOS 9 ATS compatibility, if you would like to send only HTTPS requests, please set `[blueKaiSDK setUseHttps:YES];` 
+
+After that you will have to add exceptions to your Info.plist file as follows as we do not yet support Forward Secrecy:
+```
+<key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSExceptionDomains</key>
+        <dict>
+            <key>bluekai.com</key>
+            <dict>
+                <key>NSExceptionRequiresForwardSecrecy</key>
+                <false/>
+                <key>NSIncludesSubdomains</key>
+                <true/>
+            </dict>
+            <key>bkrtx.com</key>
+            <dict>
+                <key>NSExceptionRequiresForwardSecrecy</key>
+                <false/>
+                <key>NSIncludesSubdomains</key>
+                <true/>
+            </dict>
+        </dict>
+    </dict>
+```
+
+
 ### Obtain BlueKai site ID
 
 For any demo projects a site id of `2` can be used.
