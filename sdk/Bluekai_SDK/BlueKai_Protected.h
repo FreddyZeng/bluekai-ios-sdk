@@ -15,6 +15,7 @@
 @property (strong, readwrite) NSMutableDictionary *nonLoadkeyValDict;
 @property (strong, readwrite) NSMutableDictionary *remainkeyValDict;
 @property (strong, readwrite) NSMutableString     *webUrl;
+@property (strong, readwrite) NSMutableArray     *requestQueue;
 @property (strong, readwrite) NSUserDefaults      *userDefaults;
 @property (strong, readwrite) NSMutableDictionary *dataParamsDict;
 

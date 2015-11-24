@@ -645,6 +645,17 @@ static NSString * const ATTEMPTS = @"attempts.bk";
     }
 }
 
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
+    if (webView.loading){
+        [_requestQueue addObject:request];
+        return NO;
+    }
+    else{
+        return YES;
+    }
+}
+
+
 - (void)webViewDidStartLoad:(UIWebView *)webView {
     // if "_numberOfRunningRequests" is not -1, increment by 1; otherwise (0 or -1) set it back to 1
     _numberOfRunningRequests = _numberOfRunningRequests != -1 ? _numberOfRunningRequests + 1 : 1;
@@ -736,6 +747,13 @@ static NSString * const ATTEMPTS = @"attempts.bk";
                 }
             }
         }
+    }
+    
+    if ([_requestQueue count] > 0) {
+        NSURLRequest *nextRequest = _requestQueue[0];
+        [_requestQueue removeObjectAtIndex:0];
+        _alertShowBool = NO;
+        [_webView loadRequest:nextRequest];
     }
 }
 
@@ -1011,7 +1029,7 @@ static NSString * const ATTEMPTS = @"attempts.bk";
         NSString *key = [NSString stringWithFormat:@"%@", [_keyValDict allKeys][i]];
         NSString *value = [NSString stringWithFormat:@"%@", _keyValDict[[_keyValDict allKeys][i]]];
 
-        if ((_urlLength + key.length + value.length + 2) > 255) {
+        if ((_urlLength + key.length + value.length + 2) > 2000) {
             [_remainkeyValDict setValue:value forKey:key];
         } else {
             [urlString appendString:[NSString stringWithFormat:@"&%@",
@@ -1072,6 +1090,7 @@ static NSString * const ATTEMPTS = @"attempts.bk";
     _userDefaults = [NSUserDefaults standardUserDefaults];
     _optInPreference = [_userDefaults objectForKey:@"userIsOptIn"] == NULL ? YES : [[_userDefaults valueForKey:@"userIsOptIn"] boolValue];
     _webUrl = [[NSMutableString alloc] init];
+    _requestQueue = [[NSMutableArray alloc] init];
     _nonLoadkeyValDict = [[NSMutableDictionary alloc] init];
     _remainkeyValDict = [[NSMutableDictionary alloc] init];
     _dataParamsDict = [[NSMutableDictionary alloc] init];
