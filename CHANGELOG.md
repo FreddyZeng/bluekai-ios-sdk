@@ -1,11 +1,16 @@
+## v2.0.2 (12.09.2015)
+-----
+Minor update
+
+- Fixed issue with multiple requests being triggered consequently.
+- Fixed issue with URL limit size by increasing it to standard length.
+
 ## v2.0.1 (11.20.2015)
 -----
 Minor update
 
 - Fixed namespacing of the Reachibility library which could potentially conflict with the host app's namespacing.
 - Changed README to include instructions for ATS compatibility.
-
------
 
 ## v2.0.0 (05.26.2015)
 -----
