@@ -1,3 +1,9 @@
+## v2.0.3 (01.14.2016)
+-----
+Minor update
+
+- Direct connection method now disables the handling of cookies. 
+
 ## v2.0.2 (12.09.2015)
 -----
 Minor update

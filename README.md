@@ -1,9 +1,9 @@
 ## Integrating the BlueKai SDK
 ### Download the BlueKai SDK for iOS
 
-[ARC-enabled with 64-bit support] (https://github.com/BlueKai/bluekai-ios-sdk/raw/master/lib/bluekai-ios-static-ARC-v2.0.2.zip) 
+[ARC-enabled with 64-bit support] (https://github.com/BlueKai/bluekai-ios-sdk/raw/master/lib/bluekai-ios-static-ARC-v2.0.3.zip) 
 
-[ARC-disabled with 64-bit support, if you need Manual Garbage Collection] (https://github.com/BlueKai/bluekai-ios-sdk/raw/master/lib/bluekai-ios-static-nonARC-v2.0.2.zip)
+[ARC-disabled with 64-bit support, if you need Manual Garbage Collection] (https://github.com/BlueKai/bluekai-ios-sdk/raw/master/lib/bluekai-ios-static-nonARC-v2.0.3.zip)
 
 ### iOS 9+ ATS Compatibility
 For iOS 9 ATS compatibility, if you would like to send only HTTPS requests, please set `[blueKaiSDK setUseHttps:YES];` 

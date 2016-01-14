@@ -906,6 +906,7 @@ static NSString * const ATTEMPTS = @"attempts.bk";
             [self blueKaiLogger:_devMode withString:@"Sending URL directly to tags" withObject:_webUrl];
             NSURL *directUrl = [NSURL URLWithString:_webUrl];
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:directUrl];
+            [request setHTTPShouldHandleCookies:false];
             [request setHTTPMethod:@"GET"];
             
             [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
