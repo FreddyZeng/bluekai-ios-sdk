@@ -23,9 +23,9 @@ BlueKai      *blueKaiSDK;
     
 //    blueKaiSDK = [[BlueKai alloc] initWithSiteId:@"19198" withAppVersion:@"1.0" withIdfa:@"ASHDJHJ-1231241-ASDASD" withView:self withDevMode:YES];
     
-    blueKaiSDK = [[BlueKai alloc] initAutoIdfaEnabledWithSiteId:@"19198" withAppVersion:@"1.0" withView:self withDevMode:YES];
+    blueKaiSDK = [[BlueKai alloc] initAutoIdfaEnabledWithSiteId:@"18517" withAppVersion:@"1.0" withView:self withDevMode:NO];
                   
-//    blueKaiSDK = [[BlueKai alloc] initDirectAutoIdfaEnabledWithSiteId:@"19198" withAppVersion:@"1.0" withDevMode:YES];
+//    blueKaiSDK = [[BlueKai alloc] initDirectAutoIdfaEnabledWithSiteId:@"18517" withAppVersion:@"1.0" withDevMode:NO];
     
     blueKaiSDK.useHttps = YES;
         
@@ -43,9 +43,7 @@ BlueKai      *blueKaiSDK;
 
 }
 - (IBAction)test:(id)sender {
-    
-    [blueKaiSDK updateWithDictionary:@{@"IAB2":@"1", @"IAB22_gc_pgc":@"1"}];
-
+    [blueKaiSDK updateWithDictionary:@{@"IAB1":[NSString stringWithFormat:@"%d", arc4random_uniform(1000)]}];
 }
 
 - (void)appCameToForeground

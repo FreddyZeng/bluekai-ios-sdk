@@ -639,19 +639,20 @@ static NSString * const ATTEMPTS = @"attempts.bk";
         @autoreleasepool {
             NSURL * nurl = [NSURL URLWithString:url];
             NSURLRequest * nsur = [NSURLRequest requestWithURL:nurl];
-            [_webView loadRequest:nsur];
-        }
-       
-    }
-}
+            
+            if ([[_webView stringByEvaluatingJavaScriptFromString:@"document.iframeLoaded"] isEqualToString:@"complete"] || [_requestQueue count] == 0) {
+                
+                [_webView stringByEvaluatingJavaScriptFromString:@"document.iframeLoaded = undefined"];
 
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
-    if (webView.loading){
-        [_requestQueue addObject:request];
-        return NO;
-    }
-    else{
-        return YES;
+                [_requestQueue addObject:nsur];
+                [_webView loadRequest:nsur];
+
+            }
+            
+            else {
+                [_requestQueue addObject:nsur];
+            }
+        }
     }
 }
 
@@ -749,11 +750,17 @@ static NSString * const ATTEMPTS = @"attempts.bk";
         }
     }
     
-    if ([_requestQueue count] > 0) {
-        NSURLRequest *nextRequest = _requestQueue[0];
-        [_requestQueue removeObjectAtIndex:0];
-        _alertShowBool = NO;
-        [_webView loadRequest:nextRequest];
+    if ([[_webView stringByEvaluatingJavaScriptFromString:@"document.iframeLoaded"] isEqualToString:@"complete"]) {
+        
+        if ([_requestQueue count] > 0) {
+            [_requestQueue removeObjectAtIndex:0];
+        }
+        
+        if ([_requestQueue count] > 0) {
+            NSURLRequest *nextRequest = _requestQueue[0];
+            _alertShowBool = NO;
+            [_webView loadRequest:nextRequest];
+        }
     }
 }
 
@@ -887,7 +894,13 @@ static NSString * const ATTEMPTS = @"attempts.bk";
         [self blueKaiLogger:_devMode withString:errorMessage withObject:_keyValDict];
     } else {
         _webView.tag = 1;
-        [NSThread detachNewThreadSelector:@selector(startBackgroundJob:) toTarget:self withObject:_keyValDict];
+        
+        if (_useDirectHTTPCalls){
+            [NSThread detachNewThreadSelector:@selector(startBackgroundJob:) toTarget:self withObject:_keyValDict];
+        }
+        else{
+            [self startBackgroundJob:_keyValDict];
+        }
     }
 }
 
