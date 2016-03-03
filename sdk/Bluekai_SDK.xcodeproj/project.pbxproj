@@ -313,7 +313,7 @@
 		D79AF74E173A1AA7002E0A0B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = BlueKai;
 				TargetAttributes = {
 					245725DB192C38FE00253FDB = {
@@ -556,11 +556,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					"$(ARCHS_STANDARD)",
-					armv7s,
-					x86_64,
-				);
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/TestRunnerApp.app/TestRunnerApp";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -604,7 +599,7 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
 			};
@@ -614,11 +609,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					"$(ARCHS_STANDARD)",
-					armv7s,
-					x86_64,
-				);
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/TestRunnerApp.app/TestRunnerApp";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -667,7 +657,6 @@
 				ARCHS = (
 					"$(ARCHS_STANDARD)",
 					armv7s,
-					x86_64,
 				);
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
@@ -680,7 +669,7 @@
 					"$(inherited)",
 					"$(SRCROOT)",
 				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "Bluekai_SDK/BlueKai.xcodeproj-Prefix.pch";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_UNUSED_FUNCTION = NO;
@@ -703,7 +692,6 @@
 				ARCHS = (
 					"$(ARCHS_STANDARD)",
 					armv7s,
-					x86_64,
 				);
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
@@ -716,7 +704,7 @@
 					"$(inherited)",
 					"$(SRCROOT)",
 				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "Bluekai_SDK/BlueKai.xcodeproj-Prefix.pch";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_UNUSED_FUNCTION = NO;
