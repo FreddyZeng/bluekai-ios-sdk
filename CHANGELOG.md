@@ -1,3 +1,9 @@
+## v2.0.4 (04.20.2016)
+-----
+Minor update
+
+- Fix bugs regarding UIWebView Queueing. 
+
 ## v2.0.3 (01.14.2016)
 -----
 Minor update
